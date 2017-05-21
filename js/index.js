@@ -2,10 +2,13 @@
 
 $(function(){
     var sampleData = {
+        // leaving this in the JS -for now- since you can't have comments in JSON
+            // the list of all sources of information (where the workers go to/from, that are drawn)
             sources: [
                 {
                     x: 200,
                     y: 50,
+                    // the value to draw onto the source, string or number
                     val: 10,
                     id: 1,
                     color: "#DDD"
@@ -18,12 +21,15 @@ $(function(){
                     color: "#333"
                 }
             ],
+            // all the workers that move around the vis
             workers: [
                 {
                     x: 100,
                     baseY: 100,
+                    // number of workers with this initial group
                     count: 2,
                     color: "#F0F",
+                    // the index of the target to move to, -1 = default pos
                     target: -1
                 },
                 {
@@ -34,10 +40,12 @@ $(function(){
                     target: -1
                 }
             ],
+            // invisible targets that workers move to
             targets: [
                 {
                     x: 200,
                     y: 90,
+                    // this is the "target" attribute that workers point to
                     id: 1,
                     // the note doesn't actually "do" anything, it's there as a comment for us
                     // since we can't see the target without debug on
@@ -51,11 +59,31 @@ $(function(){
                 }
             ]
         };
+
+    expandWorkerData(sampleData);
+
+    // the actual worker visualization
+    var work = worker();
+    d3.select("#testVis")
+        .data([sampleData])
+        .call(work);
+
+    // BROKEN: Advance the animation one step
+    $("#test-adv").click(function(){
+        advanceDataTarget(sampleData);
+        console.log(sampleData);
+        d3.select("#testVis")
+            .data([sampleData])
+            .call(work);
+    });
+
+    // Expand the worker data from the compressed form (with count) to an expanded version
+    function expandWorkerData(data) {
         var toReplace = [];
         var currId = 0;
-        for(var i = 0; i < sampleData.workers.length; i++){
-            for(var workCount = 0; workCount < sampleData.workers[i].count; workCount++){
-                var curr = sampleData.workers[i];
+        for(var i = 0; i < data.workers.length; i++){
+            for(var workCount = 0; workCount < data.workers[i].count; workCount++){
+                var curr = data.workers[i];
                 var toAdd = {
                     x: curr.x,
                     y: curr.baseY,
@@ -68,20 +96,8 @@ $(function(){
                 toReplace.push(toAdd);
             }
         }
-        sampleData.workers = toReplace;
-        console.log(sampleData);
-    var work = worker();
-    d3.select("#testVis")
-        .data([sampleData])
-        .call(work);
-
-    $("#test-adv").click(function(){
-        advanceDataTarget(sampleData);
-        console.log(sampleData);
-        d3.select("#testVis")
-            .data([sampleData])
-            .call(work);
-    });
+        data.workers = toReplace;
+    }
 
     // goes through a data object and increments the worker targets, wrapping around to -1
     function advanceDataTarget(data) {
