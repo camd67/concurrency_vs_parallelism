@@ -8,7 +8,7 @@ function worker(){
         },
         width: 800,
         height: 800,
-        animationDuration: 500,
+        animationDuration: 1000,
         sourceSize: 25,
         workerSize: 25,
         debug: true, // set to true if you want to see small red circles for every target
@@ -64,19 +64,27 @@ function worker(){
                 .attr("width", attrs.workerSize)
                 .attr("height", attrs.workerSize)
                 .style("fill", function(d) { return d.color; })
-                .attr("x", function(d) { return d.target === -1 ? d.x : targetList[d.target].x; })
-                .attr("y", function(d) { return d.target === -1
-                    ? d.y + (d.index * 2 * attrs.workerSize)
-                    : targetList[d.target].y; })
+                .attr("x", function(d) { return safeGetTargetValue(d, targetList, "x"); })
+                .attr("y", function(d) { return safeGetTargetValue(d, targetList, "y"); })
                 ;
 
             var workerBoxesMerge = workers.merge(workers)
                 .transition()
-                .delay(function(d) { return d.index * attrs.animationDuration; })
-                .attr("x", function(d) { return d.target === -1 ? d.x : targetList[d.target].x; })
-                .attr("y", function(d) { return d.target === -1
-                    ? d.y + (d.index * 2 * attrs.workerSize)
-                    : targetList[d.target].y; })
+                .duration(attrs.animationDuration)
+                .delay(function(d) { return d.globalIndex * 2 * attrs.animationDuration; })
+                .on("start", function repeat(){
+                    d3.active(this)
+                    .attr("x", function(d) { return safeGetTargetValue(d, targetList, "x"); })
+                    .attr("y", function(d) { return safeGetTargetValue(d, targetList, "y"); })
+                    .transition()
+                    .duration(attrs.animationDuration)
+                    .on("start", repeat)
+                    .on("end", function(d){
+                        // cancel the animation if we're back at the start
+                        if(d.target === -1) { d3.select(this).interrupt(); }
+                        else { safeTargetIncrement(d, targetList); }
+                    })
+                })
                 ;
             workers.exit().remove();
 
@@ -111,6 +119,24 @@ function worker(){
         if(arguments.length < 2) { return attrs[attr]; }
         attrs[attr] = val;
         return this;
+    }
+
+    // get a value from either the worker or the list of targets
+    function safeGetTargetValue(worker, targetList, val) {
+        if(val === "y"){
+            return worker.target === -1
+                ? worker.y + (worker.subGroupIndex * 2 * attrs.workerSize)
+                : targetList[worker.target].y;
+        } else {
+            return worker.target === -1
+                ? worker[val]
+                : targetList[worker.target][val];
+        }
+    }
+    // increment the target, keeping the value in bounds
+    function safeTargetIncrement(worker, targetList){
+        worker.target++;
+        worker.target = worker.target > targetList.length - 1 ? -1 : worker.target;
     }
 
     // Reset any calculated variables, such as scales, functions, or values

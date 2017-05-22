@@ -11,7 +11,7 @@ $(function(){
                     // the value to draw onto the source, string or number
                     val: 10,
                     id: 1,
-                    color: "#DDD"
+                    color: "#111"
                 },
                 {
                     x: 200,
@@ -81,18 +81,32 @@ $(function(){
     function expandWorkerData(data) {
         var toReplace = [];
         var currId = 0;
+        // alternate between each of the columns so each column is depleted equally
+        var alternatingIndex = 0;
         for(var i = 0; i < data.workers.length; i++){
+            alternatingIndex = i;
             for(var workCount = 0; workCount < data.workers[i].count; workCount++){
                 var curr = data.workers[i];
                 var toAdd = {
+                    // default x pos
                     x: curr.x,
+                    // default y pos (for the entire group, calced in d3 draw code)
                     y: curr.baseY,
+                    // Color of the worker
                     color: curr.color,
-                    index: workCount,
+                    // Global index, this is unique for all workers
+                    globalIndex: alternatingIndex,
+                    // Group the worker belongs to
+                    groupIndex: i,
+                    // index WITHIN the group the worker belongs to
+                    subGroupIndex: workCount,
+                    // target to move to (-1 == default x,y)
                     target: curr.target,
+                    // Global unique id, in the order the cubes appear. TODO: This may not be needed
                     id: currId
                 };
                 currId++;
+                alternatingIndex += data.workers.length;
                 toReplace.push(toAdd);
             }
         }
