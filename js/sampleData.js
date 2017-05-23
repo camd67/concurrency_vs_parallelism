@@ -42,7 +42,7 @@ var parData = {
                 x: 100,
                 baseY: 100,
                 // number of workers with this initial group
-                count: 2,
+                count: 4,
                 color: "#F0F",
                 // the index of the target to move to, -1 = default pos
                 target: -1,
