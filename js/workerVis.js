@@ -12,7 +12,8 @@ function worker(){
         sourceSize: 25,
         workerSize: 25,
         debug: false, // set to true if you want to see small red circles for every target
-        maxTargets: 0
+        maxTargets: 0,
+        animIsPlaying: false
     }
     var _drawWidth = attrs.width - attrs.margin.left - attrs.margin.right;
     var _drawHeight = attrs.height - attrs.margin.top - attrs.margin.bottom;
@@ -20,6 +21,7 @@ function worker(){
     var vis = function(selection){
         _reset();
         selection.each(function(data, i){
+            attrs.animIsPlaying = true;
             // Select the svg element, if it exists.
             var ele = d3.select(this)
             var svg = ele.selectAll("svg").data([data]);
@@ -83,7 +85,7 @@ function worker(){
                     .on("start", repeat)
                     .on("end", function(d){
                         // cancel the animation if we're back at the start
-                        if(d.target === -1) { d3.select(this).interrupt(); }
+                        if(d.target === -1) { d3.select(this).interrupt(); attrs.animIsPlaying = false; }
                         else { targetIncrement(d); }
                     })
                 })
