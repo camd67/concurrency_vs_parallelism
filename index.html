@@ -9,6 +9,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="js/sampleData.js"></script>
     <script src="js/workerVis.js"></script>
     <script src="js/index.js"></script>
 
@@ -47,8 +48,7 @@
             
         </div>
         <div id="visualization" class="col s6 push-s1">
-            <button id="test-adv">Advance Animation</button>
-            <div id="testVis"></div>
+            
         </div>
     </div>
     <div id="background" class="row">
@@ -70,10 +70,16 @@
                 mean they'll ever be running at the same instant. 
             </p>
         </div>
-        <div id="concurrency_vis" class="col s7"></div>
+        <div id="concurrency_vis" class="col s6 push-s1">
+            <!--<button id="con-adv">Play Concurrency</button>-->
+            <div id="conVis"></div>
+        </div>
     </div>
     <div id="parallelism" class="row">
-        <div id="parallelism_vis" class="col s7"></div>
+        <div id="parallelism_vis" class="col s6">
+            <!--<button id="par-adv">Play Parallelism</button>-->
+            <div id="parVis"></div>
+        </div>
          <div id="parallelism_text" class="col s5">
             <h3>Parallelism explained.</h3>
             <p>With parallelism you are using extra resources
