@@ -1,0 +1,33 @@
+h1 {
+    font-family: sans-serif;
+}
+
+#header {
+    height: 100px;
+    width: 100%;
+    display: block;
+}
+
+#logo {
+    height: 70px;
+    width: auto;
+    padding: 1%;
+    margin-left: 40px;
+}
+
+.row {
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+#down {
+    height: 30px;
+    width: 30px;
+    text-align: center;
+    animation-duration: 1s;
+}
+
+#downAni {
+    margin-top: 30px;
+    display: block;
+}

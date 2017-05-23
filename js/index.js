@@ -1,5 +1,7 @@
 "use strict";
 
+
+
 $(function(){
     var sampleData = {
         // leaving this in the JS -for now- since you can't have comments in JSON
@@ -69,13 +71,22 @@ $(function(){
         .call(work);
 
     // BROKEN: Advance the animation one step
-    $("#test-adv").click(function(){
-        advanceDataTarget(sampleData);
+    // $("#test-adv").click(function(){
+    //     advanceDataTarget(sampleData);
+    //     console.log(sampleData);
+    //     d3.select("#testVis")
+    //         .data([sampleData])
+    //         .call(work);
+    // });
+    $(window).ready(function(){
+    advanceDataTarget(sampleData);
         console.log(sampleData);
         d3.select("#testVis")
             .data([sampleData])
             .call(work);
-    });
+})
+
+    
 
     // Expand the worker data from the compressed form (with count) to an expanded version
     function expandWorkerData(data) {

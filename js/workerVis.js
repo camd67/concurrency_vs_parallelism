@@ -7,7 +7,7 @@ function worker(){
             left: 10
         },
         width: 800,
-        height: 800,
+        height: 500,
         animationDuration: 1000,
         sourceSize: 25,
         workerSize: 25,
