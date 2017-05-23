@@ -5,7 +5,8 @@ $(function(){
     expandWorkerData(parData);
 
     // the actual worker visualization
-    var work = worker();
+    var work = worker()
+        .attr("debug", true);
     d3.select("#conVis")
         .data([conData])
         .call(work);

@@ -11,7 +11,7 @@ function worker(){
         animationDuration: 1000,
         sourceSize: 25,
         workerSize: 25,
-        debug: true, // set to true if you want to see small red circles for every target
+        debug: false, // set to true if you want to see small red circles for every target
         maxTargets: 0
     }
     var _drawWidth = attrs.width - attrs.margin.left - attrs.margin.right;
@@ -84,7 +84,7 @@ function worker(){
                     .on("end", function(d){
                         // cancel the animation if we're back at the start
                         if(d.target === -1) { d3.select(this).interrupt(); }
-                        else { targetIncrement(d, targetList); }
+                        else { targetIncrement(d); }
                     })
                 })
                 ;
@@ -105,7 +105,7 @@ function worker(){
         });
     }
 
-    vis.Attr = function(attr, val){
+    vis.attr = function(attr, val){
         if(!arguments.length) {
             console.warn("No arguments provided to attr method");
             return this;
@@ -127,6 +127,7 @@ function worker(){
     function getTargetValue(worker, targetList, val) {
         if(val === "y"){
             return worker.target === -1
+                // adjust so there's a 1 worker gap between each worker
                 ? worker.y + (worker.subGroupIndex * 2 * attrs.workerSize)
                 : targetList[worker.targets[worker.target]].y;
         } else {
@@ -135,25 +136,8 @@ function worker(){
                 : targetList[worker.targets[worker.target]][val];
         }
     }
-
-    function findNextType(index, targetList){
-        var prevType = index === -1 ? "" : targetList[index].type;
-        var newIndex = index + 1;
-        if(newIndex >= targetList.length - 1) {
-            // wrap around, no need to check type
-            return -1;
-        } else {
-            var newType = targetList[index].type;
-            while(newType === prevType && newIndex < targetList.length - 1) {
-                newIndex++;
-                newType = targetList[index].type;
-            }
-            // if we got this far, we need to wrap
-            return -1;
-        }
-    }
     // increment the target, keeping the value in bounds
-    function targetIncrement(worker, targetList){
+    function targetIncrement(worker){
         worker.target++;
         worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
     }
