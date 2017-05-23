@@ -7,7 +7,7 @@ function worker(){
             left: 10
         },
         width: 800,
-        height: 800,
+        height: 400,
         animationDuration: 1000,
         sourceSize: 25,
         workerSize: 25,
@@ -49,7 +49,7 @@ function worker(){
                 ;
             sourceGroups.append("text")
                 .attr("class", "sourceText")
-                .text(function(d) { return +d.val; })
+                .text(function(d) { return d.val; })
                 .attr("x", function(d) { return d.x - 10;})
                 .attr("y", function(d) { return d.y;})
                 .attr("text-anchor", "middle")
@@ -64,25 +64,27 @@ function worker(){
                 .attr("width", attrs.workerSize)
                 .attr("height", attrs.workerSize)
                 .style("fill", function(d) { return d.color; })
-                .attr("x", function(d) { return safeGetTargetValue(d, targetList, "x"); })
-                .attr("y", function(d) { return safeGetTargetValue(d, targetList, "y"); })
+                .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
+                .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                 ;
 
             var workerBoxesMerge = workers.merge(workers)
                 .transition()
                 .duration(attrs.animationDuration)
-                .delay(function(d) { return d.globalIndex * 2 * attrs.animationDuration; })
+                .delay(function(d) { return data.sync
+                    ? d.subGroupIndex * 2 * attrs.animationDuration
+                    : d.globalIndex * 2 * attrs.animationDuration; })
                 .on("start", function repeat(){
                     d3.active(this)
-                    .attr("x", function(d) { return safeGetTargetValue(d, targetList, "x"); })
-                    .attr("y", function(d) { return safeGetTargetValue(d, targetList, "y"); })
+                    .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
+                    .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                     .transition()
                     .duration(attrs.animationDuration)
                     .on("start", repeat)
                     .on("end", function(d){
                         // cancel the animation if we're back at the start
                         if(d.target === -1) { d3.select(this).interrupt(); }
-                        else { safeTargetIncrement(d, targetList); }
+                        else { targetIncrement(d, targetList); }
                     })
                 })
                 ;
@@ -121,22 +123,39 @@ function worker(){
         return this;
     }
 
-    // get a value from either the worker or the list of targets
-    function safeGetTargetValue(worker, targetList, val) {
+    // get a value from either the worker or the list of targets, searching till a new type is found
+    function getTargetValue(worker, targetList, val) {
         if(val === "y"){
             return worker.target === -1
                 ? worker.y + (worker.subGroupIndex * 2 * attrs.workerSize)
-                : targetList[worker.target].y;
+                : targetList[worker.targets[worker.target]].y;
         } else {
             return worker.target === -1
                 ? worker[val]
-                : targetList[worker.target][val];
+                : targetList[worker.targets[worker.target]][val];
+        }
+    }
+
+    function findNextType(index, targetList){
+        var prevType = index === -1 ? "" : targetList[index].type;
+        var newIndex = index + 1;
+        if(newIndex >= targetList.length - 1) {
+            // wrap around, no need to check type
+            return -1;
+        } else {
+            var newType = targetList[index].type;
+            while(newType === prevType && newIndex < targetList.length - 1) {
+                newIndex++;
+                newType = targetList[index].type;
+            }
+            // if we got this far, we need to wrap
+            return -1;
         }
     }
     // increment the target, keeping the value in bounds
-    function safeTargetIncrement(worker, targetList){
+    function targetIncrement(worker, targetList){
         worker.target++;
-        worker.target = worker.target > targetList.length - 1 ? -1 : worker.target;
+        worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
     }
 
     // Reset any calculated variables, such as scales, functions, or values
