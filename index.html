@@ -4,13 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="./img/CKS-logo.png" />
 
-    <link rel="stylesheet" href="index.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="js/sampleData.js"></script>
+    <script src="js/workerVis.js"></script>
     <script src="js/index.js"></script>
 
-    <title>Concurrency vs Parallelism</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+     <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
+          
+    <link rel="stylesheet" href="./css/main.css">
+
+    <title>Concurrency vs Parallelism - A Visual Explanation</title>
 </head>
 <body>
-    <h1>Page is up and running!</h1>
+    <div id="header" class="valign-wrapper">
+        <a href="index.html" class="brand-logo"><img id="logo" src="./img/CKS-logo.png" alt="logo"></a>
+    </div>
+    <div id="main" class="row">
+        <div id="explanation" class="col s5">
+            <div id="overview">
+                <h3>A visual comparison of concurrency and parallelism.</h3>
+                <p>In computer science the words concurrency and parallelism are often used synonymously.
+                    This is wrong. These are two very different ideas and we're here to set you straight.
+                </p>
+                <p>Keep scrolling. Using some typical examples, we'll show you the difference between concurrency and
+                    parallelism.
+                </p>
+                <div id="downAni" class="center-align">
+                    <img id="down" class="animated infinite bounce" src="./img/down.png" alt="down icon">
+                </div>
+            </div>
+            
+        </div>
+        <div id="visualization" class="col s6 push-s1">
+            
+        </div>
+    </div>
+    <div id="background" class="row">
+        <div id="background_vis" class="col s7"></div>
+        <div id="background_text" class="col s5">
+            <h4>A little background.</h4>
+            <p>From roughly 1980-2005, desktop computers got exponentially faster at running sequential programs.
+                But no one knows how to continue this advancement due to various technological limitations. So, we 
+                started putting multiple processors on the same chip. 
+            </p>
+        </div>
+    </div>
+    <div id="concurrency" class="row">
+         <div id="concurrency_text" class="col s5">
+            <h3>Concurrency explained.</h3>
+            <p>Concurrency helps with resource allocation. It correctly
+                and efficiently manages access to shared resources. It allows two or 
+                more tasks to start, run, and complete in overlapping time periods. This doesn't
+                mean they'll ever be running at the same instant. 
+            </p>
+        </div>
+        <div id="concurrency_vis" class="col s6 push-s1">
+            <!--<button id="con-adv">Play Concurrency</button>-->
+            <div id="conVis"></div>
+        </div>
+    </div>
+    <div id="parallelism" class="row">
+        <div id="parallelism_vis" class="col s6">
+            <!--<button id="par-adv">Play Parallelism</button>-->
+            <div id="parVis"></div>
+        </div>
+         <div id="parallelism_text" class="col s5">
+            <h3>Parallelism explained.</h3>
+            <p>With parallelism you are using extra resources
+                to solve a problem faster. With a multicore processor tasks
+                are able to run at the same time.
+            </p>
+        </div>
+    </div>
+
+    <div id="vis1" class="container"></div>
+    <div id="vis2" class="container"></div>
+    <div id="vis3" class="container"></div>
 </body>
 </html>
