@@ -1,6 +1,6 @@
 "use strict";
 
-$(function(){
+document.addEventListener("DOMContentLoaded", function(){
     expandWorkerData(conData);
     expandWorkerData(parData);
 
@@ -14,14 +14,14 @@ $(function(){
         .data([parData])
         .call(work);
 
-    $("#con-adv").click(function(){
+    document.querySelector("#con-adv").addEventListener("click", function(){
         advanceDataTarget(conData);
         d3.select("#conVis")
             .data([conData])
             .call(work);
     });
 
-    $("#par-adv").click(function(){
+    document.querySelector("#par-adv").addEventListener("click", function(){
         advanceDataTarget(parData);
         d3.select("#parVis")
             .data([parData])

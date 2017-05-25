@@ -42,26 +42,40 @@ function worker(){
             var source = ele.select(".chartg").selectAll(".source").data(data.sources, function(d) { return d.id; });
             var sourceGroups = source.enter()
                 .append("g");
-            sourceGroups.append("circle")
+            sourceGroups.append("rect")
                 .attr("class", "source")
-                .attr("cx", function(d) { return d.x; })
-                .attr("cy", function(d) { return d.y; })
-                .attr("r", attrs.sourceSize)
-                .attr("fill", function(d) { return d.color; })
+                .attr("width", function(d) { return d.w; })
+                .attr("height", function(d) { return d.h; })
+                .attr("x", function(d) { return d.x; })
+                .attr("y", function(d) { return d.y; })
+                .style("fill", "none")
+                .attr("stroke", function(d) { return d.color; })
                 ;
             sourceGroups.append("text")
                 .attr("class", "sourceText")
                 .text(function(d) { return d.val; })
-                .attr("x", function(d) { return d.x - 10;})
+                .attr("x", function(d) { return d.x;})
                 .attr("y", function(d) { return d.y;})
                 .attr("text-anchor", "middle")
-                .attr("fill", "#FFF")
+                .attr("fill", "none")
                 ;
 
             // draw all workers that move around
-            var workers = ele.select(".chartg").selectAll(".worker").data(data.workers, function(d) { return d.id;});
+            var workers = ele.select(".chartg").selectAll(".worker-group").data(data.workers, function(d) { return d.id;});
             var workerBoxes = workers.enter()
-                .append("rect")
+                .append("g")
+                .attr("class", "worker-group");
+
+            workerBoxes.append("rect")
+                .attr("class", function(d) { return "weight wid"+ + d.id; })
+                .attr("width", function(d) { return d.carryWeight; })
+                .attr("height", function(d) { return d.carryWeight; })
+                .style("fill", function(d) { return d.color; })
+                .attr("y", function(d) { return getTargetValue(d, targetList, "y") + 10; })
+                .attr("x", function(d) { return getTargetValue(d, targetList, "x") + 10; })
+                ;
+
+            workerBoxes.append("rect")
                 .attr("class", function(d) { return "worker wid" + d.id; })
                 .attr("width", attrs.workerSize)
                 .attr("height", attrs.workerSize)
@@ -70,24 +84,31 @@ function worker(){
                 .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                 ;
 
-            var workerBoxesMerge = workers.merge(workers)
+            var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
                 .duration(attrs.animationDuration)
                 .delay(function(d) { return data.sync
-                    ? d.subGroupIndex * 2 * attrs.animationDuration
-                    : d.globalIndex * 2 * attrs.animationDuration; })
+                    ? d.subGroupIndex * attrs.animationDuration
+                    : d.globalIndex * attrs.animationDuration; })
                 .on("start", function repeat(){
                     d3.active(this)
-                    .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
-                    .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
-                    .transition()
-                    .duration(attrs.animationDuration)
-                    .on("start", repeat)
-                    .on("end", function(d){
-                        // cancel the animation if we're back at the start
-                        if(d.target === -1) { d3.select(this).interrupt(); attrs.animIsPlaying = false; }
-                        else { targetIncrement(d); }
-                    })
+                        .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
+                        .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
+                        .transition()
+                        .duration(function(d) { 
+                            var dur = attrs.animationDuration;
+                            if(d.target > -1 && d.target < d.targets.length - 1){
+                                dur *= d.carryWeight / 15;
+                            }
+                            console.log(dur);
+                            return dur;
+                        })
+                        .on("start", repeat)
+                        .on("end", function(d){
+                            // cancel the animation if we're back at the start
+                            if(d.target === -1) { d3.select(this).interrupt(); attrs.animIsPlaying = false; }
+                            else { targetIncrement(d); }
+                        })
                 })
                 ;
             workers.exit().remove();
@@ -163,6 +184,8 @@ function expandWorkerData(data) {
         alternatingIndex = i;
         for(var workCount = 0; workCount < data.workers[i].count; workCount++){
             var curr = data.workers[i];
+            var cw = Math.floor(Math.random() * (curr.carryWeightRange[1] - curr.carryWeightRange[0]) + curr.carryWeightRange[0]);
+            console.log(cw);
             var toAdd = {
                 // default x pos
                 x: curr.x,
@@ -180,7 +203,8 @@ function expandWorkerData(data) {
                 target: curr.target,
                 // Global unique id, in the order the cubes appear. TODO: This may not be needed
                 id: currId,
-                targets: curr.targets
+                targets: curr.targets,
+                carryWeight: cw
             };
             currId++;
             alternatingIndex += data.workers.length;

@@ -5,6 +5,8 @@ var parData = {
             {
                 x: 150,
                 y: 50,
+                w: 200,
+                h: 75,
                 // the value to draw onto the source, string or number
                 val: "add",
                 id: 1,
@@ -14,6 +16,8 @@ var parData = {
             {
                 x: 250,
                 y: 50,
+                w: 200,
+                h: 75,
                 val: "Multi",
                 id: 2,
                 color: "#111",
@@ -22,6 +26,8 @@ var parData = {
             {
                 x: 150,
                 y: 350,
+                w: 200,
+                h: 75,
                 val: "Result",
                 id: 3,
                 color: "#333",
@@ -30,6 +36,8 @@ var parData = {
             {
                 x: 250,
                 y: 350,
+                w: 200,
+                h: 75,
                 val: "Result",
                 id: 3,
                 color: "#333",
@@ -47,7 +55,9 @@ var parData = {
                 // the index of the target to move to, -1 = default pos
                 target: -1,
                 // the targets that are valid for this worker (0-based, not ID based!)
-                targets: [0, 2]
+                targets: [0, 2],
+                // weight range from minimum to maximum
+                carryWeightRange: [15, 50]
             },
             {
                 x: 300,
@@ -55,7 +65,8 @@ var parData = {
                 count: 2,
                 color: "#0FF",
                 target: -1,
-                targets: [1, 3]
+                targets: [1, 3],
+                carryWeightRange: [20, 25]
             }
         ],
         // invisible targets that workers move to
@@ -101,17 +112,21 @@ var parData = {
 var conData = {
         sources: [
             {
-                x: 200,
-                y: 50,
-                val: "add",
+                x: 100,
+                y: 15,
+                w: 200,
+                h: 75,
+                val: "Pickup",
                 id: 1,
                 color: "#111",
                 type: "in"
             },
             {
-                x: 200,
-                y: 350,
-                val: "Result",
+                x: 100,
+                y: 300,
+                w: 200,
+                h: 75,
+                val: "Dropoff",
                 id: 3,
                 color: "#333",
                 type: "out"
@@ -119,20 +134,22 @@ var conData = {
         ],
         workers: [
             {
-                x: 100,
+                x: 25,
                 baseY: 100,
                 count: 2,
                 color: "#F0F",
                 target: -1,
-                targets: [0, 1]
+                targets: [0, 1],
+                carryWeightRange: [15, 50]
             },
             {
-                x: 300,
+                x: 350,
                 baseY: 100,
                 count: 2,
                 color: "#0FF",
                 target: -1,
-                targets: [0, 1]
+                targets: [0, 1],
+                carryWeightRange: [15, 50]
             }
         ],
         targets: [
