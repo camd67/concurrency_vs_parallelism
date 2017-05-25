@@ -37,6 +37,7 @@ function worker(){
 
             // Prep targets, since they need to be referenced outside of their draw code
             var targetList = data.targets.sort(function(a, b) { return a.id - b.id; });
+            var sourceList = data.sources.sort(function(a, b) { return a.id - b.id; });
 
             // draw all source boxes
             var source = ele.select(".chartg").selectAll(".source").data(data.sources, function(d) { return d.id; });
@@ -62,19 +63,28 @@ function worker(){
 
             // draw all workers that move around
             var workers = ele.select(".chartg").selectAll(".worker-group").data(data.workers, function(d) { return d.id;});
+            // Append all the worker wrappers, worker boxes, and worker carry boxes
             var workerBoxes = workers.enter()
                 .append("g")
                 .attr("class", "worker-group");
-
+            // weights
             workerBoxes.append("rect")
                 .attr("class", function(d) { return "weight wid"+ + d.id; })
                 .attr("width", function(d) { return d.carryWeight; })
                 .attr("height", function(d) { return d.carryWeight; })
                 .style("fill", function(d) { return d.color; })
-                .attr("y", function(d) { return getTargetValue(d, targetList, "y") + 10; })
-                .attr("x", function(d) { return getTargetValue(d, targetList, "x") + 10; })
+                .style("stroke", function(d) { return "#000"; })
+                .attr("y", function(d) {
+                    var firstSource = sourceList[d.targets[0]];
+                    return Math.random() * (firstSource.h - d.carryWeight) + firstSource.y;
+                 })
+                .attr("x", function(d) {
+                    var firstSource = sourceList[d.targets[0]];
+                    return Math.random() * (firstSource.w - d.carryWeight) + firstSource.x;
+                 })
                 ;
 
+            // workers
             workerBoxes.append("rect")
                 .attr("class", function(d) { return "worker wid" + d.id; })
                 .attr("width", attrs.workerSize)
@@ -84,6 +94,7 @@ function worker(){
                 .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                 ;
 
+            // merge in workers for the animations
             var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
                 .duration(attrs.animationDuration)
