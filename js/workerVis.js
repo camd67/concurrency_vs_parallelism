@@ -76,11 +76,17 @@ function worker(){
                 .style("stroke", function(d) { return "#000"; })
                 .attr("y", function(d) {
                     var firstSource = sourceList[d.targets[0]];
-                    return Math.random() * (firstSource.h - d.carryWeight) + firstSource.y;
+                    var lastSource = sourceList[d.targets[d.targets.length - 1]];
+                    d.weightY = Math.random() * (firstSource.h - d.carryWeight) + firstSource.y;
+                    d.weightEndY = Math.random() * (lastSource.h - d.carryWeight) + lastSource.y;
+                    return d.weightY;
                  })
                 .attr("x", function(d) {
                     var firstSource = sourceList[d.targets[0]];
-                    return Math.random() * (firstSource.w - d.carryWeight) + firstSource.x;
+                    var lastSource = sourceList[d.targets[d.targets.length - 1]];
+                    d.weightX = Math.random() * (firstSource.w - d.carryWeight) + firstSource.x;
+                    d.weightEndX = Math.random() * (lastSource.w - d.carryWeight) + lastSource.x;
+                    return d.weightX;
                  })
                 ;
 
@@ -106,22 +112,47 @@ function worker(){
                         .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
                         .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                         .transition()
-                        .duration(function(d) { 
+                        .duration(function(d) {
                             var dur = attrs.animationDuration;
                             if(d.target > -1 && d.target < d.targets.length - 1){
                                 dur *= d.carryWeight / 15;
                             }
-                            console.log(dur);
                             return dur;
                         })
                         .on("start", repeat)
                         .on("end", function(d){
                             // cancel the animation if we're back at the start
                             if(d.target === -1) { d3.select(this).interrupt(); attrs.animIsPlaying = false; }
-                            else { targetIncrement(d); }
+                            else { targetIncrement(d, true); }
                         })
-                })
-                ;
+                });
+
+                // weight boxes, mostly same animation as the first one except it has some specifics for weight movement
+                var weightBoxesMerge = workers.selectAll(".weight").merge(workers)
+                    .transition()
+                    .duration(attrs.animationDuration)
+                    .delay(function(d) { return data.sync
+                        ? d.subGroupIndex * attrs.animationDuration
+                        : d.globalIndex * attrs.animationDuration; })
+                    .on("start", function repeat(){
+                        d3.active(this)
+                            .attr("x", function(d) { return getWeightTargetValue(d, targetList, "x", true); })
+                            .attr("y", function(d) { return getWeightTargetValue(d, targetList, "y", true); })
+                            .transition()
+                            .duration(function(d) {
+                                var dur = attrs.animationDuration;
+                                if(d.target > -1 && d.target < d.targets.length - 1){
+                                    dur *= d.carryWeight / 15;
+                                }
+                                return dur;
+                            })
+                            .on("start", repeat)
+                            .on("end", function(d){
+                                // cancel the animation if we're back at the start
+                                if(d.weightTarget > d.targets.length) { d3.select(this).interrupt(); }
+                                else { targetIncrement(d, false); }
+                            })
+                    });
             workers.exit().remove();
 
             if(attrs.debug){
@@ -170,14 +201,39 @@ function worker(){
                 : targetList[worker.targets[worker.target]][val];
         }
     }
+
+    function getWeightTargetValue(worker, targetList, val){
+        if(val === "y"){
+            if(worker.weightTarget === -1){
+                return worker.weightY;
+            } else if(worker.weightTarget >= worker.targets.length){
+                return worker.weightEndY;
+            } else {
+                return targetList[worker.targets[worker.weightTarget]].y;
+            }
+        } else {
+            if(worker.weightTarget === -1){
+                return worker.weightX;
+            } else if(worker.weightTarget >= worker.targets.length){
+                return worker.weightEndX;
+            } else {
+                return targetList[worker.targets[worker.weightTarget]].x  + attrs.workerSize + 10;
+            }
+        }
+    }
     // increment the target, keeping the value in bounds
-    function targetIncrement(worker){
-        worker.target++;
-        worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
+    function targetIncrement(worker, isWorker){
+        if(isWorker){
+            worker.target++;
+            worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
+        } else {
+            // don't wrap weight targets
+            worker.weightTarget++;
+        }
     }
 
     // Reset any calculated variables, such as scales, functions, or values
-    function _reset() {
+    function _reset(data) {
         _drawWidth = attrs.width - attrs.margin.left - attrs.margin.right;
         _drawHeight = attrs.height - attrs.margin.top - attrs.margin.bottom;
     }
@@ -196,7 +252,6 @@ function expandWorkerData(data) {
         for(var workCount = 0; workCount < data.workers[i].count; workCount++){
             var curr = data.workers[i];
             var cw = Math.floor(Math.random() * (curr.carryWeightRange[1] - curr.carryWeightRange[0]) + curr.carryWeightRange[0]);
-            console.log(cw);
             var toAdd = {
                 // default x pos
                 x: curr.x,
@@ -215,7 +270,8 @@ function expandWorkerData(data) {
                 // Global unique id, in the order the cubes appear. TODO: This may not be needed
                 id: currId,
                 targets: curr.targets,
-                carryWeight: cw
+                carryWeight: cw,
+                weightTarget: curr.weightTarget
             };
             currId++;
             alternatingIndex += data.workers.length;
@@ -230,6 +286,7 @@ function advanceDataTarget(data) {
     for(var i = 0; i < data.workers.length; i++){
         var curr = data.workers[i];
         curr.target++;
+        curr.weightTarget++;
         curr.target = curr.target > data.targets.length - 1 ? -1 : curr.target;
     }
 }

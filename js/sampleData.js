@@ -54,6 +54,7 @@ var parData = {
                 color: "#F0F",
                 // the index of the target to move to, -1 = default pos
                 target: -1,
+                weightTarget: -1,
                 // the targets that are valid for this worker (0-based, not ID based!)
                 targets: [0, 2],
                 // weight range from minimum to maximum
@@ -65,6 +66,7 @@ var parData = {
                 count: 2,
                 color: "#0FF",
                 target: -1,
+                weightTarget: -1,
                 targets: [1, 3],
                 carryWeightRange: [20, 25]
             }
@@ -139,6 +141,7 @@ var conData = {
                 count: 2,
                 color: "#F0F",
                 target: -1,
+                weightTarget: -1,
                 targets: [0, 1],
                 carryWeightRange: [15, 50]
             },
@@ -148,6 +151,7 @@ var conData = {
                 count: 2,
                 color: "#0FF",
                 target: -1,
+                weightTarget: -1,
                 targets: [0, 1],
                 carryWeightRange: [15, 50]
             }
