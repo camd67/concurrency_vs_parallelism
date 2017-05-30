@@ -74,20 +74,8 @@ function worker(){
                 .attr("height", function(d) { return d.carryWeight; })
                 .style("fill", function(d) { return d.color; })
                 .style("stroke", function(d) { return "#000"; })
-                .attr("y", function(d) {
-                    var firstSource = sourceList[d.targets[0]];
-                    var lastSource = sourceList[d.targets[d.targets.length - 1]];
-                    d.weightY = Math.random() * (firstSource.h - d.carryWeight) + firstSource.y;
-                    d.weightEndY = Math.random() * (lastSource.h - d.carryWeight) + lastSource.y;
-                    return d.weightY;
-                 })
-                .attr("x", function(d) {
-                    var firstSource = sourceList[d.targets[0]];
-                    var lastSource = sourceList[d.targets[d.targets.length - 1]];
-                    d.weightX = Math.random() * (firstSource.w - d.carryWeight) + firstSource.x;
-                    d.weightEndX = Math.random() * (lastSource.w - d.carryWeight) + lastSource.x;
-                    return d.weightX;
-                 })
+                .attr("y", function(d) { console.log(d); return d.weightY; })
+                .attr("x", function(d) { return d.weightX; })
                 ;
 
             // workers
@@ -245,6 +233,8 @@ function worker(){
 function expandWorkerData(data) {
     var toReplace = [];
     var currId = 0;
+    var targetList = data.targets.sort(function(a, b) { return a.id - b.id; });
+    var sourceList = data.sources.sort(function(a, b) { return a.id - b.id; });
     // alternate between each of the columns so each column is depleted equally, if in sync
     var alternatingIndex = 0;
     for(var i = 0; i < data.workers.length; i++){
@@ -252,6 +242,8 @@ function expandWorkerData(data) {
         for(var workCount = 0; workCount < data.workers[i].count; workCount++){
             var curr = data.workers[i];
             var cw = Math.floor(Math.random() * (curr.carryWeightRange[1] - curr.carryWeightRange[0]) + curr.carryWeightRange[0]);
+            var firstSource = sourceList[curr.targets[0]];
+            var lastSource = sourceList[curr.targets[curr.targets.length - 1]];
             var toAdd = {
                 // default x pos
                 x: curr.x,
@@ -267,11 +259,18 @@ function expandWorkerData(data) {
                 subGroupIndex: workCount,
                 // target to move to (-1 == default x,y)
                 target: curr.target,
-                // Global unique id, in the order the cubes appear. TODO: This may not be needed
+                // Global unique id, in the order the cubes appears
                 id: currId,
                 targets: curr.targets,
+                // various calculations for the carry weights
                 carryWeight: cw,
-                weightTarget: curr.weightTarget
+                // weight needs to keep track of it's own target
+                weightTarget: curr.weightTarget,
+                // start and end positions for the weights. Randomly generated within the source boxes
+                weightX: Math.random() * (firstSource.w - cw) + firstSource.x,
+                weightEndX: Math.random() * (lastSource.w - cw) + lastSource.x,
+                weightY: Math.random() * (firstSource.h - cw) + firstSource.y,
+                weightEndY:  Math.random() * (lastSource.h - cw) + lastSource.y
             };
             currId++;
             alternatingIndex += data.workers.length;

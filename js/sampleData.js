@@ -1,3 +1,57 @@
+var sinData = {
+        sources: [
+            {
+                x: 100,
+                y: 15,
+                w: 200,
+                h: 75,
+                val: "Pickup",
+                id: 1,
+                color: "#111",
+                type: "in"
+            },
+            {
+                x: 100,
+                y: 300,
+                w: 200,
+                h: 75,
+                val: "Dropoff",
+                id: 3,
+                color: "#333",
+                type: "out"
+            }
+        ],
+        workers: [
+            {
+                x: 100,
+                baseY: 100,
+                count: 1,
+                color: "#F0F",
+                target: -1,
+                weightTarget: -1,
+                targets: [0, 1, 0, 1, 0, 1],
+                carryWeightRange: [15, 50]
+            }
+        ],
+        targets: [
+            {
+                x: 200,
+                y: 90,
+                id: 1,
+                note: "first circle",
+                type: "in"
+            },
+            {
+                x: 200,
+                y: 300,
+                id: 4,
+                note: "second circle",
+                type: "out"
+            }
+        ],
+        sync: true
+    };
+
 var parData = {
     // leaving this in the JS -for now- since you can't have comments in JSON
         // the list of all sources of information (where the workers go to/from, that are drawn)
