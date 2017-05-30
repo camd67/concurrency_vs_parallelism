@@ -23,7 +23,7 @@ var sinData = {
         ],
         workers: [
             {
-                x: 100,
+                x: 50,
                 baseY: 100,
                 count: 1,
                 color: "#F0F",
@@ -37,14 +37,14 @@ var sinData = {
         ],
         targets: [
             {
-                x: 200,
+                x: 100,
                 y: 90,
                 id: 1,
                 note: "first circle",
                 type: "in"
             },
             {
-                x: 200,
+                x: 100,
                 y: 300,
                 id: 4,
                 note: "second circle",
@@ -59,9 +59,9 @@ var parData = {
         // the list of all sources of information (where the workers go to/from, that are drawn)
         sources: [
             {
-                x: 150,
-                y: 50,
-                w: 200,
+                x: 75,
+                y: 25,
+                w: 100,
                 h: 75,
                 // the value to draw onto the source, string or number
                 val: "add",
@@ -70,9 +70,9 @@ var parData = {
                 type: "in" // currently unused...
             },
             {
-                x: 250,
-                y: 50,
-                w: 200,
+                x: 225,
+                y: 25,
+                w: 100,
                 h: 75,
                 val: "Multi",
                 id: 2,
@@ -80,9 +80,9 @@ var parData = {
                 type: "in"
             },
             {
-                x: 150,
-                y: 350,
-                w: 200,
+                x: 75,
+                y: 300,
+                w: 100,
                 h: 75,
                 val: "Result",
                 id: 3,
@@ -90,9 +90,9 @@ var parData = {
                 type: "out"
             },
             {
-                x: 250,
-                y: 350,
-                w: 200,
+                x: 225,
+                y: 300,
+                w: 100,
                 h: 75,
                 val: "Result",
                 id: 3,
@@ -103,10 +103,10 @@ var parData = {
         // all the workers that move around the vis
         workers: [
             {
-                x: 100,
-                baseY: 100,
+                x: 25,
+                baseY: 125,
                 // number of workers with this initial group
-                count: 4,
+                count: 3,
                 color: "#F0F",
                 // the index of the target to move to, -1 = default pos
                 target: -1,
@@ -117,13 +117,14 @@ var parData = {
                 targetCount: 2,
                 // the targets that are valid for this worker (0-based, not ID based!)
                 targets: [0, 2],
-                // weight range from minimum to maximum
+                // weight range from minimum to maximum. If you want all same weights set it to [x, x+1]
+                // for example, [15,16]
                 carryWeightRange: [15, 50]
             },
             {
-                x: 300,
-                baseY: 100,
-                count: 2,
+                x: 350,
+                baseY: 125,
+                count: 3,
                 color: "#0FF",
                 target: -1,
                 weightTarget: -1,
@@ -136,8 +137,8 @@ var parData = {
         // invisible targets that workers move to
         targets: [
             {
-                x: 150,
-                y: 90,
+                x: 75,
+                y: 100,
                 // this is the "target" attribute that workers point to
                 id: 1,
                 // the note doesn't actually "do" anything, it's there as a comment for us
@@ -146,21 +147,21 @@ var parData = {
                 type: "in"
             },
             {
-                x: 250,
-                y: 90,
+                x: 225,
+                y: 100,
                 id: 2,
                 note: "multi circle",
                 type: "in"
             },
             {
-                x: 150,
+                x: 75,
                 y: 300,
                 id: 3,
                 note: "res 1 circle",
                 type: "out"
             },
             {
-                x: 250,
+                x: 225,
                 y: 300,
                 id: 4,
                 note: "res 2 circle",
@@ -224,14 +225,14 @@ var conData = {
         ],
         targets: [
             {
-                x: 200,
+                x: 100,
                 y: 90,
                 id: 1,
                 note: "first circle",
                 type: "in"
             },
             {
-                x: 200,
+                x: 100,
                 y: 300,
                 id: 4,
                 note: "second circle",

@@ -55,14 +55,6 @@ function worker(){
                 .style("fill", "none")
                 .attr("stroke", function(d) { return d.color; })
                 ;
-            sourceGroups.append("text")
-                .attr("class", "sourceText")
-                .text(function(d) { return d.val; })
-                .attr("x", function(d) { return d.x;})
-                .attr("y", function(d) { return d.y;})
-                .attr("text-anchor", "middle")
-                .attr("fill", "none")
-                ;
 
             /*=================== WEIGHT AND WORKER CREATION ===================*/
             // draw all workers that move around
@@ -99,6 +91,12 @@ function worker(){
                 ;
 
             /*=================== WEIGHT AND WORKER ANIMATIONS ===================*/
+            // BEFORE doing anything else, quickly move the weights back to their original positions
+            weights.selectAll(".weight").merge(weights)
+                .transition()
+                .duration(150)
+                .attr("x", function(d){ return d.weightX; })
+                .attr("y", function(d){ return d.weightY; });
             // merge in workers for the animations
             var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
@@ -133,7 +131,7 @@ function worker(){
                     .transition()
                     .ease(easeFunc)
                     .duration(attrs.animationDuration)
-                    .delay(function(d) {console.log(d.target, d.weightTarget); return data.sync
+                    .delay(function(d) { return data.sync
                         ? d.subGroupIndex * attrs.animationDuration
                         : d.globalIndex * attrs.animationDuration; })
                     .on("start", function repeat(){
@@ -201,8 +199,8 @@ function worker(){
                 : targetList[worker.targets[worker.target]].y;
         } else {
             return worker.target === -1
-                ? worker[val]
-                : targetList[worker.targets[worker.target]][val];
+                ? worker.x
+                : targetList[worker.targets[worker.target]].x + worker.horizOffset;
         }
     }
 
@@ -221,7 +219,7 @@ function worker(){
             } else if(weight.weightTarget >= weight.targetCount){
                 return weight.weightEndX;
             } else {
-                return targetList[weight.targets[weight.weightTarget]].x  + attrs.workerSize + 10;
+                return targetList[weight.targets[weight.weightTarget]].x + weight.horizOffset  + attrs.workerSize + 10;
             }
         }
     }
@@ -246,6 +244,11 @@ function worker(){
     return vis;
 }
 
+
+function randomRange(min, max){
+    return Math.random() * (max - min) + min;
+}
+
 // Expand the worker data from the compressed form (with count) to an expanded version
 function expandWorkerData(data) {
     var toReplace = [];
@@ -260,9 +263,10 @@ function expandWorkerData(data) {
         alternatingIndex = i;
         for(var workCount = 0; workCount < data.workers[i].count; workCount++){
             var curr = data.workers[i];
-            var cw = Math.floor(Math.random() * (curr.carryWeightRange[1] - curr.carryWeightRange[0]) + curr.carryWeightRange[0]);
+            var cw = Math.floor(randomRange(curr.carryWeightRange[0], curr.carryWeightRange[1]));
             var firstSource = sourceList[curr.targets[0]];
             var lastSource = sourceList[curr.targets[curr.targets.length - 1]];
+            var horizOffset = Math.random() * (firstSource.w - cw);
             for(var weightCount = 0; weightCount < curr.weightCount; weightCount++){
                 var newWeight = {
                     // some stats need to be shared between worker and weight. Mostly for anim timing
@@ -275,9 +279,11 @@ function expandWorkerData(data) {
                     carryWeight: cw,
                     color: curr.color,
                     targetCount: curr.targetCount,
+                    horizOffset: horizOffset,
                     // weight needs to keep track of it's own target
                     // start negative so that it "waits" till it's turn
                     weightTarget: curr.weightTarget - (curr.targetCount * weightCount),
+                    baseWeightTarget: curr.weightTarget - (curr.targetCount * weightCount),
                     // start and end positions for the weights
                     // Randomly generated within the source boxes
                     weightX: Math.random() * (firstSource.w - cw) + firstSource.x,
@@ -308,7 +314,7 @@ function expandWorkerData(data) {
                 targets: curr.targets,
                 // various calculations for the carry weights
                 carryWeight: cw,
-                weights: weights
+                horizOffset: horizOffset
             };
             currId++;
             alternatingIndex += data.workers.length;
