@@ -13,13 +13,16 @@ function worker(){
         workerSize: 25,
         debug: false, // set to true if you want to see small red circles for every target
         maxTargets: 0,
-        animIsPlaying: false
+        animIsPlaying: false,
+        easeExpo: 1.5
     }
     var _drawWidth = attrs.width - attrs.margin.left - attrs.margin.right;
     var _drawHeight = attrs.height - attrs.margin.top - attrs.margin.bottom;
 
     var vis = function(selection){
         _reset();
+        var easeFunc = d3.easePolyInOut.exponent(attrs.easeExpo);
+        //var easeFunc = d3.easeQuadInOut;
         selection.each(function(data, i){
             attrs.animIsPlaying = true;
             // Select the svg element, if it exists.
@@ -61,22 +64,13 @@ function worker(){
                 .attr("fill", "none")
                 ;
 
+            /*=================== WEIGHT AND WORKER CREATION ===================*/
             // draw all workers that move around
             var workers = ele.select(".chartg").selectAll(".worker-group").data(data.workers, function(d) { return d.id;});
             // Append all the worker wrappers, worker boxes, and worker carry boxes
             var workerBoxes = workers.enter()
                 .append("g")
                 .attr("class", "worker-group");
-            // weights
-            workerBoxes.append("rect")
-                .attr("class", function(d) { return "weight wid"+ + d.id; })
-                .attr("width", function(d) { return d.carryWeight; })
-                .attr("height", function(d) { return d.carryWeight; })
-                .style("fill", function(d) { return d.color; })
-                .style("stroke", function(d) { return "#000"; })
-                .attr("y", function(d) { console.log(d); return d.weightY; })
-                .attr("x", function(d) { return d.weightX; })
-                ;
 
             // workers
             workerBoxes.append("rect")
@@ -88,9 +82,27 @@ function worker(){
                 .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                 ;
 
+            var weights = ele.select(".chartg").selectAll(".weight-group").data(data.weights, function(d){ return d.id; })
+
+            var weightBoxes = weights.enter()
+                .append("g")
+                .attr("class", "weight-group");
+            // weights
+            weightBoxes.append("rect")
+                .attr("class", function(d) { return "weight wid"+ + d.id; })
+                .attr("width", function(d) { return d.carryWeight; })
+                .attr("height", function(d) { return d.carryWeight; })
+                .style("fill", function(d) { return d.color; })
+                .style("stroke", function(d) { return "#000"; })
+                .attr("y", function(d) { return d.weightY; })
+                .attr("x", function(d) { return d.weightX; })
+                ;
+
+            /*=================== WEIGHT AND WORKER ANIMATIONS ===================*/
             // merge in workers for the animations
             var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
+                .ease(easeFunc)
                 .duration(attrs.animationDuration)
                 .delay(function(d) { return data.sync
                     ? d.subGroupIndex * attrs.animationDuration
@@ -100,6 +112,7 @@ function worker(){
                         .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
                         .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
                         .transition()
+                        .ease(easeFunc)
                         .duration(function(d) {
                             var dur = attrs.animationDuration;
                             if(d.target > -1 && d.target < d.targets.length - 1){
@@ -116,10 +129,11 @@ function worker(){
                 });
 
                 // weight boxes, mostly same animation as the first one except it has some specifics for weight movement
-                var weightBoxesMerge = workers.selectAll(".weight").merge(workers)
+                var weightBoxesMerge = weights.selectAll(".weight").merge(weights)
                     .transition()
+                    .ease(easeFunc)
                     .duration(attrs.animationDuration)
-                    .delay(function(d) { return data.sync
+                    .delay(function(d) {console.log(d.target, d.weightTarget); return data.sync
                         ? d.subGroupIndex * attrs.animationDuration
                         : d.globalIndex * attrs.animationDuration; })
                     .on("start", function repeat(){
@@ -127,6 +141,7 @@ function worker(){
                             .attr("x", function(d) { return getWeightTargetValue(d, targetList, "x", true); })
                             .attr("y", function(d) { return getWeightTargetValue(d, targetList, "y", true); })
                             .transition()
+                            .ease(easeFunc)
                             .duration(function(d) {
                                 var dur = attrs.animationDuration;
                                 if(d.target > -1 && d.target < d.targets.length - 1){
@@ -137,10 +152,11 @@ function worker(){
                             .on("start", repeat)
                             .on("end", function(d){
                                 // cancel the animation if we're back at the start
-                                if(d.weightTarget > d.targets.length) { d3.select(this).interrupt(); }
+                                if(d.target === -1) { d3.select(this).interrupt(); }
                                 else { targetIncrement(d, false); }
                             })
                     });
+
             workers.exit().remove();
 
             if(attrs.debug){
@@ -190,31 +206,32 @@ function worker(){
         }
     }
 
-    function getWeightTargetValue(worker, targetList, val){
+    function getWeightTargetValue(weight, targetList, val){
         if(val === "y"){
-            if(worker.weightTarget === -1){
-                return worker.weightY;
-            } else if(worker.weightTarget >= worker.targets.length){
-                return worker.weightEndY;
+            if(weight.weightTarget <= -1){
+                return weight.weightY;
+            } else if(weight.weightTarget >= weight.targetCount){
+                return weight.weightEndY;
             } else {
-                return targetList[worker.targets[worker.weightTarget]].y;
+                return targetList[weight.targets[weight.weightTarget]].y;
             }
         } else {
-            if(worker.weightTarget === -1){
-                return worker.weightX;
-            } else if(worker.weightTarget >= worker.targets.length){
-                return worker.weightEndX;
+            if(weight.weightTarget <= -1){
+                return weight.weightX;
+            } else if(weight.weightTarget >= weight.targetCount){
+                return weight.weightEndX;
             } else {
-                return targetList[worker.targets[worker.weightTarget]].x  + attrs.workerSize + 10;
+                return targetList[weight.targets[weight.weightTarget]].x  + attrs.workerSize + 10;
             }
         }
     }
     // increment the target, keeping the value in bounds
     function targetIncrement(worker, isWorker){
-        if(isWorker){
-            worker.target++;
-            worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
-        } else {
+        // always increment target, so everyone's in sync
+        worker.target++;
+        worker.target = worker.target > worker.targets.length - 1 ? -1 : worker.target;
+        if(!isWorker)
+        {
             // don't wrap weight targets
             worker.weightTarget++;
         }
@@ -232,7 +249,9 @@ function worker(){
 // Expand the worker data from the compressed form (with count) to an expanded version
 function expandWorkerData(data) {
     var toReplace = [];
+    var weights = [];
     var currId = 0;
+    var weightId = 0;
     var targetList = data.targets.sort(function(a, b) { return a.id - b.id; });
     var sourceList = data.sources.sort(function(a, b) { return a.id - b.id; });
     // alternate between each of the columns so each column is depleted equally, if in sync
@@ -244,6 +263,31 @@ function expandWorkerData(data) {
             var cw = Math.floor(Math.random() * (curr.carryWeightRange[1] - curr.carryWeightRange[0]) + curr.carryWeightRange[0]);
             var firstSource = sourceList[curr.targets[0]];
             var lastSource = sourceList[curr.targets[curr.targets.length - 1]];
+            for(var weightCount = 0; weightCount < curr.weightCount; weightCount++){
+                var newWeight = {
+                    // some stats need to be shared between worker and weight. Mostly for anim timing
+                    globalIndex: alternatingIndex,
+                    groupIndex: i,
+                    subGroupIndex: workCount,
+                    id: weightId,
+                    target: curr.target,
+                    targets: curr.targets,
+                    carryWeight: cw,
+                    color: curr.color,
+                    targetCount: curr.targetCount,
+                    // weight needs to keep track of it's own target
+                    // start negative so that it "waits" till it's turn
+                    weightTarget: curr.weightTarget - (curr.targetCount * weightCount),
+                    // start and end positions for the weights
+                    // Randomly generated within the source boxes
+                    weightX: Math.random() * (firstSource.w - cw) + firstSource.x,
+                    weightEndX: Math.random() * (lastSource.w - cw) + lastSource.x,
+                    weightY: Math.random() * (firstSource.h - cw) + firstSource.y,
+                    weightEndY:  Math.random() * (lastSource.h - cw) + lastSource.y
+                };
+                weightId++;
+                weights.push(newWeight);
+            }
             var toAdd = {
                 // default x pos
                 x: curr.x,
@@ -264,20 +308,16 @@ function expandWorkerData(data) {
                 targets: curr.targets,
                 // various calculations for the carry weights
                 carryWeight: cw,
-                // weight needs to keep track of it's own target
-                weightTarget: curr.weightTarget,
-                // start and end positions for the weights. Randomly generated within the source boxes
-                weightX: Math.random() * (firstSource.w - cw) + firstSource.x,
-                weightEndX: Math.random() * (lastSource.w - cw) + lastSource.x,
-                weightY: Math.random() * (firstSource.h - cw) + firstSource.y,
-                weightEndY:  Math.random() * (lastSource.h - cw) + lastSource.y
+                weights: weights
             };
             currId++;
             alternatingIndex += data.workers.length;
             toReplace.push(toAdd);
         }
     }
+    data.weights = weights;
     data.workers = toReplace;
+    console.log(data);
 }
 
 // goes through a data object and increments the worker targets, wrapping around to -1
@@ -285,7 +325,12 @@ function advanceDataTarget(data) {
     for(var i = 0; i < data.workers.length; i++){
         var curr = data.workers[i];
         curr.target++;
+        curr.target = curr.target > data.targets.length - 1 ? -1 : curr.target;
+    }
+    for(var i = 0; i < data.weights.length; i++){
+        var curr = data.weights[i];
         curr.weightTarget++;
+        curr.target++;
         curr.target = curr.target > data.targets.length - 1 ? -1 : curr.target;
     }
 }

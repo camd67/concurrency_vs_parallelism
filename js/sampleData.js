@@ -29,6 +29,8 @@ var sinData = {
                 color: "#F0F",
                 target: -1,
                 weightTarget: -1,
+                weightCount: 3,
+                targetCount: 2,
                 targets: [0, 1, 0, 1, 0, 1],
                 carryWeightRange: [15, 50]
             }
@@ -109,6 +111,10 @@ var parData = {
                 // the index of the target to move to, -1 = default pos
                 target: -1,
                 weightTarget: -1,
+                // number of weights to pick up (requires equal amount of target loops)
+                weightCount: 1,
+                // how many targets are in the main loop (usually 2)
+                targetCount: 2,
                 // the targets that are valid for this worker (0-based, not ID based!)
                 targets: [0, 2],
                 // weight range from minimum to maximum
@@ -121,6 +127,8 @@ var parData = {
                 color: "#0FF",
                 target: -1,
                 weightTarget: -1,
+                weightCount: 1,
+                targetCount: 2,
                 targets: [1, 3],
                 carryWeightRange: [20, 25]
             }
@@ -196,6 +204,8 @@ var conData = {
                 color: "#F0F",
                 target: -1,
                 weightTarget: -1,
+                weightCount: 1,
+                targetCount: 2,
                 targets: [0, 1],
                 carryWeightRange: [15, 50]
             },
@@ -206,6 +216,8 @@ var conData = {
                 color: "#0FF",
                 target: -1,
                 weightTarget: -1,
+                weightCount: 1,
+                targetCount: 2,
                 targets: [0, 1],
                 carryWeightRange: [15, 50]
             }
