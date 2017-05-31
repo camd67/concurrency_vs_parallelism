@@ -6,7 +6,7 @@ $(function() {
     var chartData;
     
     // Load data in using d3's csv function.
-    d3.csv('js/avg_year.csv', function(error, data) {
+    d3.csv('data/avg_year.csv', function(error, data) {
         // Put data into generic terms
         var prepData = function() {
             chartData = data.map(function(d) {
@@ -24,7 +24,7 @@ $(function() {
         var chartWrapper = d3.select('#background-vis')
                 .datum(chartData) 
                 .call(chart); 
-
+        
         // Initialize materialize style
         $('select').material_select()
 

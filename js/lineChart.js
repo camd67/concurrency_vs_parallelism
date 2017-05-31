@@ -1,12 +1,12 @@
 function lineChart(){
-    var margin = {top:30, right:10, left:70, bottom:50},
-    width = 500,
+    var margin = {top:30, right:40, left:50, bottom:50},
+    width = 700,
     height = 500
     xScale = d3.scaleLinear(),
     yScale = d3.scaleLinear(),
     xTitle = 'X Axis Title',
     yTitle = 'Y Axis Title',
-    stroke = 'steelblue',
+    stroke = 'lightgray',
     strokeWidth = '1.5',
     title = '';
 
@@ -36,6 +36,15 @@ function lineChart(){
             svgEnter.append('g')
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
                 .attr("class", 'chart-g');
+
+            ///////// HOVERS STUFF OVERLAY //////////////
+            // Apend an overlay rectangle to catch hover events
+            var overlay = svgEnter.select('.chart-g').append('rect')
+                .attr("class", "overlay")
+                .attr('width', drawWidth)
+                .attr('height', drawHeight)
+                .attr('opacity', 0);
+            //////// HOVER STUFF OVERLAY ////////////////
 
             // Append axes to the svgEnter element
             svgEnter.append('g')
@@ -112,6 +121,95 @@ function lineChart(){
                 .attr('stroke-dashoffset', function() {return -d3.select(this).node().getTotalLength();})
                 .attr('stroke-dasharray', function() {return d3.select(this).node().getTotalLength() + " " + d3.select(this).node().getTotalLength();})
                 .remove();
+
+            ///////////////////// START HOVER STUFF ///////////////////////
+            // Function to draw hovers (circles and text) based on year (called from the `overlay` mouseover)
+            function drawHovers(year) {
+                // Bisector function to get closest data point: note, this returns an *index* in your array
+                // Get hover data by using the bisector function to find the y value
+                var bisector = d3.bisector(function(d, x) {
+                    return +d.x - x;
+                }).left;
+
+                // Iterate through your selectedData array
+                // Sort the values of each country by +year
+                // Return the element closest to your year variable.
+                var bisectors = []
+                    data.sort(function(a, b) {
+                        return (+a.x) - (+b.x);
+                    });
+
+                    bisectors.push(data[bisector(data, year)]);
+          
+                // Do a data-join (enter, update, exit) to draw circles
+                var circles = svgEnter.select('.chart-g').selectAll('circle')
+                    .data(function(d) { return bisectors; });
+
+                circles.enter().append('circle')
+                    .attr('r', 4)
+                    .attr('cx', function(d) {
+                        return xScale(d.x);
+                    })
+                    .attr('cy', function(d) {
+                        return yScale(d.y);
+                    })
+                    .style('stroke', 'red')
+                    .style('fill', 'none')
+                    .style('stroke-width', '1px');
+
+                circles
+                    .transition().duration(50)
+                    .attr('cx', function(d) {
+                        return xScale(d.x);
+                    })
+                    .attr('cy', function(d) {
+                        return yScale(d.y);
+                    });
+
+                circles.exit().remove();
+
+                // Do a data-join (enter, update, exit) draw text
+                var hoverText = svgEnter.select('.chart-g').selectAll('.hoverText')
+                    .data(function(d) { return bisectors; });
+
+                hoverText.enter().append('text')
+                    .attr('class', 'hoverText')
+                    .attr('x', function(d) {return xScale(d.x);})
+                    .attr('y', function(d) {return yScale(d.y);})
+                    .attr('transform', 'translate(5,-5)')
+                    .text(function(d) {return Math.round(d.y)})
+                    .style('text-shadow', '-1px 0 10px white, 0 1px 10px white, 1px 0 10px white, 0 -1px 10px white');
+
+                hoverText  
+                    .transition().duration(10)
+                    .attr('x', function(d) {return xScale(d.x);})
+                    .attr('y', function(d) {return yScale(d.y);})
+                    .text(function(d) {return Math.round(d.y)})
+
+                hoverText.exit().remove();
+            }
+
+            // Call Hover Stuff
+            overlay
+            .on('mousemove', function(){
+                var checkYear = xScale.invert(d3.mouse(this)[0]);
+                if(checkYear >= xMax){
+                    checkYear = xMax
+                }
+                if(checkYear <= xMin){
+                    checkYear = xMin
+                }
+                drawHovers(checkYear);
+            })
+            .on('mouseout', function() {
+                svgEnter.select('.chart-g').selectAll('circle').remove();
+                svgEnter.select('.chart-g').selectAll('.hoverText').remove();
+            })
+            ///////////////////// END HOVER STUFF /////////////////////////
+
+
+
+
         });
     };
 
