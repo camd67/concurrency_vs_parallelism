@@ -1,7 +1,7 @@
 function lineChart(){
     var margin = {top:30, right:40, left:50, bottom:50},
-    width = 700,
-    height = 500
+    width = 500,
+    height = 300
     xScale = d3.scaleLinear(),
     yScale = d3.scaleLinear(),
     xTitle = 'X Axis Title',

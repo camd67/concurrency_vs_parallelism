@@ -1,3 +1,4 @@
+var isPlaying = false;
 function worker(){
     var attrs = {
         margin: {
@@ -6,7 +7,7 @@ function worker(){
             bottom: 10,
             left: 10
         },
-        width: 800,
+        width: 400,
         height: 400,
         animationDuration: 1000,
         sourceSize: 25,
@@ -24,7 +25,9 @@ function worker(){
         var easeFunc = d3.easePolyInOut.exponent(attrs.easeExpo);
         //var easeFunc = d3.easeQuadInOut;
         selection.each(function(data, i){
+            // console.log(attrs.animIsPlaying);
             attrs.animIsPlaying = true;
+            // console.log(attrs.animIsPlaying);
             // Select the svg element, if it exists.
             var ele = d3.select(this)
             var svg = ele.selectAll("svg").data([data]);
@@ -96,7 +99,9 @@ function worker(){
                 .transition()
                 .duration(150)
                 .attr("x", function(d){ return d.weightX; })
-                .attr("y", function(d){ return d.weightY; });
+                .attr("y", function(d){ return d.weightY; })
+                .attr("animIsPlaying", true);
+            console.log(attrs.animIsPlaying)
             // merge in workers for the animations
             var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
@@ -323,7 +328,6 @@ function expandWorkerData(data) {
     }
     data.weights = weights;
     data.workers = toReplace;
-    console.log(data);
 }
 
 // goes through a data object and increments the worker targets, wrapping around to -1

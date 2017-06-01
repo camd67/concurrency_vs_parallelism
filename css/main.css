@@ -18,6 +18,17 @@ h1 {
 .row {
     padding-left: 50px;
     padding-right: 50px;
+    margin-bottom: 100px;
+}
+
+.noMargin {
+    align-items: stretch;
+    margin: 0;
+    vertical-align: bottom;
+}
+
+#introduction_icons {
+    display: flex;
 }
 
 #down {
@@ -34,4 +45,23 @@ h1 {
 
 #parallelism, #concurrency {
     margin-top: 50px;
+}
+
+#house, #person, #truck {
+    vertical-align: bottom;
+}
+
+#house {
+    width: 150px;
+    height: auto;
+}
+
+#person {
+    width: 70px;
+    height: auto;
+}
+
+#truck {
+    width: 150px;
+    height: auto;
 }
