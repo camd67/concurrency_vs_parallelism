@@ -38,6 +38,9 @@ $(function(){
     var sinWork = worker();
     var conWork = worker();
     var parWork = worker();
+    var s = worker();
+    var c = worker();
+    var p = worker();
 
     d3.select("#con")
         .data([conData])
@@ -48,6 +51,16 @@ $(function(){
     d3.select("#sin")
         .data([sinData])
         .call(sinWork);
+
+    d3.select("#c")
+        .data([conData])
+        .call(c);
+    d3.select("#p")
+        .data([parData])
+        .call(p);
+    d3.select("#s")
+        .data([sinData])
+        .call(s);
 
 
     $(window).scroll(function() {
@@ -93,6 +106,30 @@ $(function(){
                     d3.select("#parVis")
                         .data([parData])
                         .call(parWork);
+                }
+                
+            }
+    });
+
+    $(window).scroll(function() {
+        var hT = $('#compare').offset().top,
+            hH = $('#compare').outerHeight(),
+            wH = $(window).height(),
+            wS = $(this).scrollTop();
+            if (wS > (hT+hH-wH)){
+                if (!s.attr('animIsPlaying') && !c.attr('animIsPlaying') && !p.attr('animIsPlaying')) {
+                    advanceDataTarget(conData);
+                    d3.select("#c")
+                        .data([conData])
+                        .call(c);
+                    advanceDataTarget(parData);
+                    d3.select("#p")
+                        .data([parData])
+                        .call(p);
+                    advanceDataTarget(sinData);
+                    d3.select("#s")
+                        .data([sinData])
+                        .call(s);
                 }
                 
             }
