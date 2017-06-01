@@ -104,7 +104,7 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!parWork.attr('animIsPlaying')) {
-                    parData(parData);
+                    resetData(parData);
                     advanceDataTarget(parData);
                     d3.select("#parVis")
                         .data([parData])
