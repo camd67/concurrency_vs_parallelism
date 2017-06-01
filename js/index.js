@@ -56,20 +56,15 @@ $(function(){
         wH = $(window).height(),
         wS = $(this).scrollTop();
         if (wS > (hT+hH-wH)){
+            console.log("scroll")
             if (!sinWork.attr('animIsPlaying')) {
                 advanceDataTarget(sinData);
                 d3.select("#sinVis")
                     .data([sinData])
                     .call(sinWork);
             }
-            
         }
     });
-
-
-        
-    
-    
 
     $(window).scroll(function() {
         var hT = $('#concurrency').offset().top,

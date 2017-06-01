@@ -8,6 +8,11 @@ h1 {
     display: block;
 }
 
+#header, #main, #introduction, #background, #sequential, #concurrency, #parallelism, #compare {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
 #logo {
     height: 70px;
     width: auto;
@@ -86,5 +91,10 @@ h1 {
     }
     .name  h4,  .name  p {
         padding-left: calc( (100% - 280px) / 2)
+    }
+
+    #header, #main, #introduction, #background, #sequential, #concurrency, #parallelism, #compare {
+        margin-left: 10%;
+        margin-right: 10%;
     }
 }
