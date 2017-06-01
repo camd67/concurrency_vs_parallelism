@@ -31,6 +31,16 @@ h1 {
     display: flex;
 }
 
+#team > h3 {
+    margin-bottom: 60px;
+}
+
+#team {
+    background-color: rgba(229, 241, 249, .3);
+    margin-bottom: 0;
+    padding-bottom: 60px;
+}
+
 #down {
     height: 30px;
     width: 30px;
@@ -64,4 +74,17 @@ h1 {
 #truck {
     width: 150px;
     height: auto;
+}
+
+.name > h4 {
+    margin-bottom: 2px;
+}
+
+@media screen and (min-width: 1400px) {
+	.responsive-img {
+        max-width: 280px !important;
+    }
+    .name  h4,  .name  p {
+        padding-left: calc( (100% - 280px) / 2)
+    }
 }
