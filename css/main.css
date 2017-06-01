@@ -8,6 +8,11 @@ h1 {
     display: block;
 }
 
+#header, #main, #introduction, #background, #sequential, #concurrency, #parallelism, #compare {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
 #logo {
     height: 70px;
     width: auto;
@@ -18,6 +23,27 @@ h1 {
 .row {
     padding-left: 50px;
     padding-right: 50px;
+    margin-bottom: 100px;
+}
+
+.noMargin {
+    align-items: stretch;
+    margin: 0;
+    vertical-align: bottom;
+}
+
+#introduction_icons {
+    display: flex;
+}
+
+#team > h3 {
+    margin-bottom: 60px;
+}
+
+#team {
+    background-color: rgba(229, 241, 249, .3);
+    margin-bottom: 0;
+    padding-bottom: 60px;
 }
 
 #down {
@@ -34,4 +60,41 @@ h1 {
 
 #parallelism, #concurrency {
     margin-top: 50px;
+}
+
+#house, #person, #truck {
+    vertical-align: bottom;
+}
+
+#house {
+    width: 150px;
+    height: auto;
+}
+
+#person {
+    width: 70px;
+    height: auto;
+}
+
+#truck {
+    width: 150px;
+    height: auto;
+}
+
+.name > h4 {
+    margin-bottom: 2px;
+}
+
+@media screen and (min-width: 1400px) {
+	.responsive-img {
+        max-width: 280px !important;
+    }
+    .name  h4,  .name  p {
+        padding-left: calc( (100% - 280px) / 2)
+    }
+
+    #header, #main, #introduction, #background, #sequential, #concurrency, #parallelism, #compare {
+        margin-left: 10%;
+        margin-right: 10%;
+    }
 }

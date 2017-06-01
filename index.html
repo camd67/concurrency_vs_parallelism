@@ -10,7 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="js/sampleData.js"></script>
-    <script src="js/workerVis.js"></script>
+    <script src="js/workerViss.js"></script>
+    <script src="js/lineCharts.js"></script>
     <script src="js/index.js"></script>
 
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
@@ -32,7 +33,7 @@
         <a href="index.html" class="brand-logo"><img id="logo" src="./img/CKS-logo.png" alt="logo"></a>
     </div>
     <div id="main" class="row">
-        <div id="explanation" class="col s5">
+        <div id="explanation" class="col s12 m7">
             <div id="overview">
                 <h3>A visual comparison of concurrency and parallelism.</h3>
                 <p>In computer science the words concurrency and parallelism are often used synonymously.
@@ -47,50 +48,155 @@
             </div>
             
         </div>
-        <div id="visualization" class="col s6 push-s1">
-            
+    </div>
+
+    <div id="introduction" class="row valign-wrapper">
+        <div id="introduction_icons" class="col s12 l7 text-center">
+            <img src="./img/k.gif" alt="house person">            
+        </div>
+        <div id="introduction_text" class="col s12 l5">
+            <h4>A short introduction.</h4>
+            <p> This is you. Say hi! You're about to move, so you need to move your boxes from your house to the moving van.
+                Some boxes are heavy, these boxes take you longer to carry. Other boxes are super light, so you're able to carry
+                them no problem! This is the example we're going to explore to explain concurrency and parallelism. We'll also compare
+                both of them to typical sequential programming.
+            </p>
+            <p>Before we delve into the nitty gritty of parallelism and concurrency, let's first take a quick peek at a little background
+                information.
+            </p>
         </div>
     </div>
-    <div id="background" class="row">
-        <div id="background_vis" class="col s7"></div>
-        <div id="background_text" class="col s5">
+
+    <div id="background" class="row valign-wrapper">
+        <div id="background_text" class="col s12 l5">
             <h4>A little background.</h4>
             <p>From roughly 1980-2005, desktop computers got exponentially faster at running sequential programs.
                 But no one knows how to continue this advancement due to various technological limitations. So, we 
-                started putting multiple processors on the same chip. 
+                started putting multiple processors on the same chip. This is the magic sauce that allowed us to begin
+                parallel programming. We're able to get two things done at the same time. Is your mind blown yet? Probably not.
+                But we'll get there!
+            </p>
+            <p>Looking at this visualization you can see that in 2005 processors seem to get slower. Why would that be?
+                Experts guess that because companies started putting multiple processors on the same chip that speed no longer
+                became as important. Two processors that are each 2mhz each can still process data faster than one  3mhz processor.
+            </p>
+        </div>
+        <div id="background-vis" class="col s12 l7"></div>
+    </div>
+    <div id="sequential" class="row valign-wrapper">
+        <div id="sequential_vis" class="col s12 l6 push-s1">
+            <!--<button id="con-adv">Play Concurrency</button>-->
+            <div id="sinVis"></div>
+        </div>
+         <div id="sequential_text" class="col s12 l5">
+            <h3>Sequential programming.</h3>
+            <p>Before we get into the good stuff, let's look at the basics. Sequential
+                programming is similar to a person who doesn't have anyone there to help 
+                them move. They can only take one box at a time. They take one box, 
+                place it in the truck, then take the next and so on until all the boxes are
+                in the truck. This sad, friendless person takes much longer to accomplish their 
+                task because they can only complete one task at once.
+            </p>
+            <p>
+                 This is how many traditional programs are run. Sequential programming starts
+                 at the top of the script, executes the first function, then continues onto 
+                 the next. Nothing fancy here, but definitely necessary for most of the modern 
+                 programs we have today. 
             </p>
         </div>
     </div>
-    <div id="concurrency" class="row">
-         <div id="concurrency_text" class="col s5">
+    <div id="concurrency" class="row valign-wrapper">
+         <div id="concurrency_text" class="col s12 l5">
             <h3>Concurrency explained.</h3>
-            <p>Concurrency helps with resource allocation. It correctly
+            <p>
+                Concurrency shakes up sequential programming a little bit.
+                It mostly helps with resource allocation. Placed within our
+                example, you and a few friends are moving your boxes. Not all the boxes 
+                have been fully packed yet, so you go grab the first fully packed box and 
+                start moving it. While your doing this one of your friends is packing up another
+                box. They don't start lifting and moving their box, because you only have one
+                small moving truck and only one of you can comfortably place boxes into the 
+                truck at a time. Once you're done placing your box in the truck, your friend
+                can then start moving their box without running into you. They also have free access
+                to the truck. Then another friend can go and grab their box and start packing it up to move.
+            </p>
+            <p>This type of programming is helpful because it correctly
                 and efficiently manages access to shared resources. It allows two or 
                 more tasks to start, run, and complete in overlapping time periods. This doesn't
-                mean they'll ever be running at the same instant. 
+                mean they'll ever be running at the same instant. This way you and your friends 
+                can finish packing a little bit faster, even if it still takes awhile. 
             </p>
         </div>
-        <div id="concurrency_vis" class="col s6 push-s1">
+        <div id="concurrency_vis" class="col s12 l6 push-s1">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="conVis"></div>
         </div>
     </div>
     <div id="parallelism" class="row">
-        <div id="parallelism_vis" class="col s6">
+        <div id="parallelism_vis" class="col s12 l6">
             <!--<button id="par-adv">Play Parallelism</button>-->
             <div id="parVis"></div>
         </div>
-         <div id="parallelism_text" class="col s5">
+         <div id="parallelism_text" class="col s12 l5">
             <h3>Parallelism explained.</h3>
+            <p>
+                Parallelism is where the real magic happens. You and your friends decide
+                that it would be faster to have two trucks. This way two different people 
+                can go grab boxes and place them into the truck without getting in the
+                way of someone else trying to place their box in the truck. So you get two
+                trucks and split up the boxes so you know which ones go into which truck. From
+                here two people are able to grab boxes and begin moving them at the same time. 
+            </p>
             <p>With parallelism you are using extra resources
                 to solve a problem faster. With a multicore processor tasks
-                are able to run at the same time.
+                are able to run at the same time. This is how your computer can run 
+                multiple programs at the same time. It also helps get things done faster. This
+                is the real magic of the programming world. 
             </p>
         </div>
     </div>
-
-    <div id="vis1" class="container"></div>
-    <div id="vis2" class="container"></div>
-    <div id="vis3" class="container"></div>
+    <div id="compare" class="row">
+        <div class="col s12">
+            <h3>A side-by-side</h3>
+            <h3>comparison.</h3>
+        </div>
+        <div class="col s12 m6 l4">
+            <div id="s"></div>
+        </div>
+        <div class="col s12 m6 l4">
+             <div id="c"></div>
+        </div>
+        <div class="col s12 m6 l4">
+            <div id="p"></div>
+        </div>
+        <!--<div id="parallelism_vis" class="col s12 m6">
+            <button id="par-adv">Play Parallelism</button>-->
+            <!--<div id="parVis"></div>
+        </div>-->
+         
+    </div>
+    <div id="team" class="row">
+        <h3 class="center-align">Our team.</h3>
+        <div style="cursor: pointer;" onclick="window.location='https://www.linkedin.com/in/camerondoane';" class="col s3 center-align name">
+            <img class="responsive-img" src="./img/cam.jpg">
+            <h4 class="left-align">Cameron.</h4>
+            <p class="left-align">Animator to the extreme, led the development efforts.</p>
+        </div>
+        <div style="cursor: pointer;" onclick="window.location='http://katrinaezis.com/';" class="col s3 center-align name">
+            <img class="responsive-img" src="./img/katrina2.jpg">
+            <h4 class="left-align">Katrina.</h4>
+            <p class="left-align">Designer, developer, overall cool chick.</p>
+        </div>
+        <div style="cursor: pointer;" onclick="window.location='https://www.linkedin.com/in/kanon-shibata-1ab895117/';" class="col s3 center-align name">
+            <img class="responsive-img" src="./img/kanon.jpg">
+            <h4 class="left-align">Kanon.</h4>
+            <p class="left-align">Chart creator of your dreams, she gets down with d3.</p>
+        </div>
+        <div style="cursor: pointer;" onclick="window.location='https://www.linkedin.com/in/sanchya-mahajan-1ab928123/';"  class="col s3 center-align name">
+            <img class="responsive-img" src="./img/Sanchya.jpg">
+            <h4 class="left-align">Sanchya.</h4>
+            <p class="left-align">Hard to pronounce name, easy to understand graphs.</p>
+        </div>
+    </div>
 </body>
 </html>
