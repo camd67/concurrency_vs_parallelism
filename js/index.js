@@ -58,6 +58,7 @@ $(function(){
         if (wS > (hT+hH-wH)){
             console.log("scroll")
             if (!sinWork.attr('animIsPlaying')) {
+                resetData(sinData);
                 advanceDataTarget(sinData);
                 d3.select("#sinVis")
                     .data([sinData])
@@ -73,6 +74,7 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!conWork.attr('animIsPlaying')) {
+                    resetData(conData);
                      advanceDataTarget(conData);
                     d3.select("#conVis")
                         .data([conData])
@@ -89,6 +91,7 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!parWork.attr('animIsPlaying')) {
+                    parData(parData);
                     advanceDataTarget(parData);
                     d3.select("#parVis")
                         .data([parData])

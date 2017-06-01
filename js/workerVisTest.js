@@ -23,12 +23,14 @@ document.addEventListener("DOMContentLoaded", function(){
         .call(sinWork);
 
     document.querySelector("#sin-adv").addEventListener("click", function(){
+        resetData(sinData);
         advanceDataTarget(sinData);
         d3.select("#sinVis")
             .data([sinData])
             .call(sinWork);
     });
     document.querySelector("#con-adv").addEventListener("click", function(){
+        resetData(conData);
         advanceDataTarget(conData);
         d3.select("#conVis")
             .data([conData])
@@ -36,6 +38,7 @@ document.addEventListener("DOMContentLoaded", function(){
     });
 
     document.querySelector("#par-adv").addEventListener("click", function(){
+        resetData(parData);
         advanceDataTarget(parData);
         d3.select("#parVis")
             .data([parData])
