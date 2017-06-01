@@ -65,7 +65,7 @@ function worker(){
                 .attr("class", "worker-group");
 
             // workers
-            workerBoxes.append("path")
+            workerBoxes.append("rect")
                 .attr("class", function(d) { return "worker wid" + d.id; })
                 .attr("width", attrs.workerSize)
                 .attr("height", attrs.workerSize)

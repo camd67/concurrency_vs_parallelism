@@ -30,9 +30,19 @@ $(function(){
 
     });
 
+    var cd = jQuery.extend(true, {}, conData);
+    var pd = jQuery.extend(true, {}, parData);
+    var sd = jQuery.extend(true, {}, sinData);
+        
     expandWorkerData(conData);
     expandWorkerData(parData);
     expandWorkerData(sinData);
+
+    console.log("asdfasf");
+    console.log(sd);
+    expandWorkerData(cd);
+    expandWorkerData(pd);
+    expandWorkerData(sd);
 
     // the actual worker visualization
     var sinWork = worker();
@@ -53,13 +63,13 @@ $(function(){
         .call(sinWork);
 
     d3.select("#c")
-        .data([conData])
+        .data([cd])
         .call(c);
     d3.select("#p")
-        .data([parData])
+        .data([pd])
         .call(p);
     d3.select("#s")
-        .data([sinData])
+        .data([sd])
         .call(s);
 
 
@@ -114,6 +124,7 @@ $(function(){
             }
     });
 
+    console.log(sd, sinData)
     $(window).scroll(function() {
         var hT = $('#compare').offset().top,
             hH = $('#compare').outerHeight(),
@@ -121,17 +132,17 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!s.attr('animIsPlaying') && !c.attr('animIsPlaying') && !p.attr('animIsPlaying')) {
-                    advanceDataTarget(conData);
+                    advanceDataTarget(cd);
                     d3.select("#c")
-                        .data([conData])
+                        .data([cd])
                         .call(c);
-                    advanceDataTarget(parData);
+                    advanceDataTarget(pd);
                     d3.select("#p")
-                        .data([parData])
+                        .data([pd])
                         .call(p);
-                    advanceDataTarget(sinData);
+                    advanceDataTarget(sd);
                     d3.select("#s")
-                        .data([sinData])
+                        .data([sd])
                         .call(s);
                 }
                 
