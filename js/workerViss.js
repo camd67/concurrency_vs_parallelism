@@ -326,6 +326,16 @@ function expandWorkerData(data) {
     data.workers = toReplace;
 }
 
+function resetData(data){
+    for(var i = 0; i < data.workers.length; i++){
+        data.workers[i].target = -1;
+    }
+    for(var i = 0; i < data.weights.length; i++){
+        data.weights[i].target = -1;
+        data.weights[i].weightTarget  = data.weights[i].baseWeightTarget;
+    }    
+}
+
 // goes through a data object and increments the worker targets, wrapping around to -1
 function advanceDataTarget(data) {
     for(var i = 0; i < data.workers.length; i++){
