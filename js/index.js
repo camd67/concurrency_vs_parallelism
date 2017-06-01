@@ -35,18 +35,19 @@ $(function(){
     expandWorkerData(sinData);
 
     // the actual worker visualization
-    var work = worker()
-        .attr("debug", false);
+    var sinWork = worker();
+    var conWork = worker();
+    var parWork = worker();
+
     d3.select("#con")
         .data([conData])
-        .call(work);
+        .call(conWork);
     d3.select("#par")
         .data([parData])
-        .call(work);
+        .call(parWork);
     d3.select("#sin")
         .data([sinData])
-        .call(work);
-
+        .call(sinWork);
 
 
     $(window).scroll(function() {
@@ -55,15 +56,11 @@ $(function(){
         wH = $(window).height(),
         wS = $(this).scrollTop();
         if (wS > (hT+hH-wH)){
-            // console.log(worker().attr('animIsPlaying'));
-            console.log(worker().attr("animIsPlaying"));
-            if (!worker().attr('animIsPlaying')) {
-                // console.log("animation")
+            if (!sinWork.attr('animIsPlaying')) {
                 advanceDataTarget(sinData);
                 d3.select("#sinVis")
                     .data([sinData])
-                    .call(work);
-                // console.log(worker().attr('animIsPlaying'));
+                    .call(sinWork);
             }
             
         }
@@ -80,17 +77,11 @@ $(function(){
             wH = $(window).height(),
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
-                // console.log(worker().attr('animIsPlaying'));
-                console.log(worker().attr("animIsPlaying"));
-                if (!worker().attr('animIsPlaying')) {
-                    // console.log("animation")
-                    console.log(worker().attr("width"));
+                if (!conWork.attr('animIsPlaying')) {
                      advanceDataTarget(conData);
-                     console.log(isPlaying)
                     d3.select("#conVis")
                         .data([conData])
-                        .call(work);
-                    // console.log(worker().attr('animIsPlaying'));
+                        .call(conWork);
                 }
                
             }
@@ -102,11 +93,11 @@ $(function(){
             wH = $(window).height(),
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
-                if (!worker().attr('animIsPlaying')) {
+                if (!parWork.attr('animIsPlaying')) {
                     advanceDataTarget(parData);
                     d3.select("#parVis")
                         .data([parData])
-                        .call(work);
+                        .call(parWork);
                 }
                 
             }

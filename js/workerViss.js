@@ -1,4 +1,5 @@
-var isPlaying = false;
+"use strict";
+
 function worker(){
     var attrs = {
         margin: {
@@ -23,11 +24,7 @@ function worker(){
     var vis = function(selection){
         _reset();
         var easeFunc = d3.easePolyInOut.exponent(attrs.easeExpo);
-        //var easeFunc = d3.easeQuadInOut;
         selection.each(function(data, i){
-            // console.log(attrs.animIsPlaying);
-            attrs.animIsPlaying = true;
-            // console.log(attrs.animIsPlaying);
             // Select the svg element, if it exists.
             var ele = d3.select(this)
             var svg = ele.selectAll("svg").data([data]);
@@ -98,10 +95,9 @@ function worker(){
             weights.selectAll(".weight").merge(weights)
                 .transition()
                 .duration(150)
-                .attr("x", function(d){ return d.weightX; })
+                .attr("x", function(d){ attrs.animIsPlaying = true; return d.weightX; })
                 .attr("y", function(d){ return d.weightY; })
-                .attr("animIsPlaying", true);
-            console.log(attrs.animIsPlaying)
+                ;
             // merge in workers for the animations
             var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
                 .transition()
