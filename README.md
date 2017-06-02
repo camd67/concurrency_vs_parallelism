@@ -98,7 +98,7 @@ If the parameter of `.hoverColor()` is not specified, returns color of hover cir
 
 #### Data Object
 In order to properly use workerVis.js you need a properly structured data object. This is an annotated example of the data object:
-```json
+```js
 {
     // the list of all sources of information (where the workers go to/from, that are drawn)
     // Since these are just rectangles, all attributes are required
