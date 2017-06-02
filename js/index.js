@@ -4,7 +4,7 @@ $(function(){
     var xVar = 'year';
     var yVar = 'mhz';
     var chartData;
-    
+
     // Load data in using d3's csv function.
     d3.csv('data/avg_year.csv', function(error, data) {
         // Put data into generic terms
@@ -22,17 +22,25 @@ $(function(){
         var chart = lineChart().xTitle('Year').yTitle('mhz');
 
         var chartWrapper = d3.select('#background-vis')
-                .datum(chartData) 
-                .call(chart); 
-        
+                .datum(chartData)
+                .call(chart);
+
         // Initialize materialize style
         $('select').material_select()
 
     });
 
+    var cd = jQuery.extend(true, {}, conData);
+    var pd = jQuery.extend(true, {}, parData);
+    var sd = jQuery.extend(true, {}, sinData);
+
     expandWorkerData(conData);
     expandWorkerData(parData);
     expandWorkerData(sinData);
+
+    expandWorkerData(cd);
+    expandWorkerData(pd);
+    expandWorkerData(sd);
 
     // the actual worker visualization
     var sinWork = worker();
@@ -53,13 +61,13 @@ $(function(){
         .call(sinWork);
 
     d3.select("#c")
-        .data([conData])
+        .data([cd])
         .call(c);
     d3.select("#p")
-        .data([parData])
+        .data([pd])
         .call(p);
     d3.select("#s")
-        .data([sinData])
+        .data([sd])
         .call(s);
 
 
@@ -69,7 +77,6 @@ $(function(){
         wH = $(window).height(),
         wS = $(this).scrollTop();
         if (wS > (hT+hH-wH)){
-            console.log("scroll")
             if (!sinWork.attr('animIsPlaying')) {
                 resetData(sinData);
                 advanceDataTarget(sinData);
@@ -93,7 +100,7 @@ $(function(){
                         .data([conData])
                         .call(conWork);
                 }
-               
+
             }
     });
 
@@ -110,7 +117,7 @@ $(function(){
                         .data([parData])
                         .call(parWork);
                 }
-                
+
             }
     });
 
@@ -121,20 +128,20 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!s.attr('animIsPlaying') && !c.attr('animIsPlaying') && !p.attr('animIsPlaying')) {
-                    advanceDataTarget(conData);
+                    advanceDataTarget(cd);
                     d3.select("#c")
-                        .data([conData])
+                        .data([cd])
                         .call(c);
-                    advanceDataTarget(parData);
+                    advanceDataTarget(pd);
                     d3.select("#p")
-                        .data([parData])
+                        .data([pd])
                         .call(p);
-                    advanceDataTarget(sinData);
+                    advanceDataTarget(sd);
                     d3.select("#s")
-                        .data([sinData])
+                        .data([sd])
                         .call(s);
                 }
-                
+
             }
     });
 });
