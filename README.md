@@ -1,6 +1,102 @@
 # Concurrency vs Parallelism
 
-## Data Object
+Welcome. We have created an explorable explanation of concurrency and parallelism concepts to help people to understand these concepts and the differences between these concepts better. We do this through the use of visualizations written in D3.JS and explanations. These visualizations are reusable.
+
+## How our code works
+
+### Line Chart
+
+This backgroundVisTest visualization takes in data pulled from [https://github.com/preshing/analyze-spec-benchmarks](https://github.com/preshing/analyze-spec-benchmarks). From this data, the 'date' and 'mhz' columns were extracted. From the date column, the year value was extracted. The average 'mhz' for all the cpu test units in a given year was calculated. This new condensed dataset with two columns was used to create the first visualization. 
+
+The first visualization creates a reusable line chart with a hovering element to show the values of data points. This visualization shows how the efficiency of computers has changed throughout history.
+
+#### Data Prep
+
+The *lineCharts.js* file uses mapped datasets or arrays to display data.
+The dataset used for our page can be found in the data folder as `avg_year.csv`.
+
+To prepare the data, load in your data and use the following method to map the data:
+
+```js
+var prepData = function() {
+    chartData = data.map(function(d) {
+        return {
+            x: d[xVar],
+            y: d[yVar],
+        };
+    });
+};
+
+prepData(); // Call the function to prep your data
+```
+
+#### Initialize, Draw, Update
+
+To get started on rendering the chart, use the following approach:
+
+```js
+// Define function to draw the line chart
+var chart = lineChart().param1(value1).param2(value2);
+
+// Select your div, join the data, and call the chart
+var chartWrapper = d3.select('#my-div')
+        .datum(chartData) 
+        .call(chart); 
+```
+
+To update the data or parameters, use:
+
+```js
+// Update a chart parameter and the data (on some event handler)
+chart.param1(newValue);
+chartWrapper.datum(newDataSet).call(chart);
+```
+
+#### API Reference
+
+**.height(*int*)**
+
+Sets the *height* of the svg. The default height is 300.
+If the parameter of `.height()` is not specified, returns height.
+
+**.width(*int*)**
+
+Sets the *width* of the svg. The default width is 500.
+If the parameter of `.width()` is not specified, returns width.
+
+**.strokeColor(*string*)**
+
+Sets the *color* of the line. The default color is light gray.
+If the parameter of `.strokeColor()` is not specified, returns the color of the line.
+
+**.strokeWidth(*int*)**
+
+Sets the width of the line. The default width is 1.5.
+If the parameter of `.strokeWidth()` is not specified, returns the line width of the line.
+
+**.xTitle(*string*)**
+
+Sets the *title of the x-axis*. The x-axis title will not show if method is not called with a value.
+If the parameter of `.xTitle()` is not specified, returns title of x-axis.
+
+**.yTitle(*string*)**
+
+Sets the *title of the y-axis*. The y-axis title will not show if method is not called with a value.
+If the parameter of `.yTitle()` is not specified, returns title of y-axis. 
+
+**.title(*string*)**
+
+Sets the *title of the line chart*. The chart title will not show if method is not called with a value.
+If the parameter of `.title()` is not specified, returns title of chart.
+
+**.hoverColor(*string*)**
+
+Sets the *color of the hover circle*. The default color is red.
+If the parameter of `.hoverColor()` is not specified, returns color of hover circle.
+
+### Worker Visualization
+
+#### Data Object
 In order to properly use workerVis.js you need a properly structured data object. This is an annotated example of the data object:
 ```json
 {
@@ -91,7 +187,7 @@ In order to properly use workerVis.js you need a properly structured data object
 ```
 It is important to note that functions such as `expandWorkerData` do modify the object passed in, so if you are re-using objects make sure to clone them first.
 
-## Example usage
+#### Example usage
 In order to use workerVis.js you need to do a few steps.
 1. Create your data object, as described above
 2. Get that object in your script, either through d3.Json or by having it as a variable in a javascript file
