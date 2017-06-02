@@ -11,10 +11,8 @@ function worker(){
         width: 400,
         height: 400,
         animationDuration: 1000,
-        sourceSize: 25,
         workerSize: 25,
         debug: false, // set to true if you want to see small red circles for every target
-        maxTargets: 0,
         animIsPlaying: false,
         easeExpo: 1.5
     }
@@ -100,9 +98,9 @@ function worker(){
             weights.selectAll(".weight").merge(weights)
                 .transition()
                 .duration(150)
-                .attr("x", function(d){ 
+                .attr("x", function(d){
                     // not the best thing, but it works
-                    attrs.animIsPlaying = true; 
+                    attrs.animIsPlaying = true;
                     return d.weightX; })
                 .attr("y", function(d){ return d.weightY; })
                 ;
@@ -340,7 +338,7 @@ function resetData(data){
     for(var i = 0; i < data.weights.length; i++){
         data.weights[i].target = -1;
         data.weights[i].weightTarget  = data.weights[i].baseWeightTarget;
-    }    
+    }
 }
 
 // goes through a data object and increments the worker targets, wrapping around to -1
