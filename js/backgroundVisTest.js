@@ -18,7 +18,7 @@ $(function() {
         };
         prepData();
 
-        // Define function to draw ScatterPlot
+        // Define function to draw lineCharts
         var chart = lineChart().xTitle('Year').yTitle('mhz');
 
         var chartWrapper = d3.select('#background-vis')
