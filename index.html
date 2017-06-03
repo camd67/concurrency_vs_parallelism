@@ -14,9 +14,9 @@
     <script src="js/lineChart.js"></script>
     <script src="js/index.js"></script>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
      <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
@@ -84,12 +84,15 @@
         <div id="background-vis" class="col s12 l7"></div>
     </div>
     <div id="sequential" class="row valign-wrapper">
-        <div id="sequential_vis" class="col s12 l6 push-s1">
+        <div id="sequential_vis" class="col s12 l6 push-s1 center-align">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="sinVis"></div>
+            <div class="center-align">
+                <a id="loop-seq" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+            </div>
         </div>
          <div id="sequential_text" class="col s12 l5">
-            <h3>Sequential programming.</h3>
+            <h3>Sequential programming. </h3>
             <p>Before we get into the good stuff, let's look at the basics. Sequential
                 programming is similar to a person who doesn't have anyone there to help
                 them move. They can only take one box at a time. They take one box,
@@ -127,15 +130,21 @@
                 can finish packing a little bit faster, even if it still takes awhile.
             </p>
         </div>
-        <div id="concurrency_vis" class="col s12 l6 push-s1">
+        <div id="concurrency_vis" class="col s12 l6 push-s1 center-align">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="conVis"></div>
+            <div class="center-align container">
+                <a id="loop-con" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+            </div>
         </div>
     </div>
     <div id="parallelism" class="row">
-        <div id="parallelism_vis" class="col s12 l6">
+        <div id="parallelism_vis" class="col s12 l6 center-align">
             <!--<button id="par-adv">Play Parallelism</button>-->
             <div id="parVis"></div>
+            <div class="center-align container">
+                <a id="loop-par" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+            </div>
         </div>
          <div id="parallelism_text" class="col s12 l5">
             <h3>Parallelism explained.</h3>
@@ -160,14 +169,17 @@
             <h3>A side-by-side</h3>
             <h3>comparison.</h3>
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6 l4 center-align">
             <div id="s"></div>
+            <h5 class="center-align">Sequential</h5>
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6 l4 center-align">
              <div id="c"></div>
+             <h5 class="center-align">Concurrent</h5>
         </div>
-        <div class="col s12 m6 l4">
+        <div class="col s12 m6 l4 center-align">
             <div id="p"></div>
+            <h5 class="center-align">Parallel</h5>
         </div>
 
     </div>
