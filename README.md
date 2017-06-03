@@ -235,5 +235,5 @@ Modifies a given data object (in the proper format described above) so that it c
 ### `resetData(dataObj)`
 Resets the data object so all workers and weights are at their starting locations. Should be called before `advanceDataTarget`.
 
-## `advanceDataTarget(dataObj)`
+### `advanceDataTarget(dataObj)`
 Prepares to start the animation, advancing each worker and weight one target forward which allows them to move to the next target.
