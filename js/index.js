@@ -147,4 +147,31 @@ $(function(){
 
             }
     });
+    $("#loop-seq").click(function(){
+        if (!sinWork.attr('animIsPlaying')) {
+            resetData(sinData);
+            advanceDataTarget(sinData);
+            d3.select("#sinVis")
+                .data([sinData])
+                .call(sinWork);
+        }
+    });
+    $("#loop-con").click(function(){
+        if (!conWork.attr('animIsPlaying')) {
+            resetData(conData);
+            advanceDataTarget(conData);
+            d3.select("#conVis")
+                .data([conData])
+                .call(conWork);
+        }
+    });
+    $("#loop-par").click(function(){
+        if (!parWork.attr('animIsPlaying')) {
+            resetData(parData);
+            advanceDataTarget(parData);
+            d3.select("#parVis")
+                .data([parData])
+                .call(parWork);
+        }
+    });
 });

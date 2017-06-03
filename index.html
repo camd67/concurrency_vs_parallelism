@@ -83,12 +83,12 @@
         </div>
         <div id="background-vis" class="col s12 l7"></div>
     </div>
-    <div id="sequential" class="row valign-wrapper visSection">
-        <div id="sequential_vis" class="col s12 l6 push-s1">
+    <div id="sequential" class="row valign-wrapper">
+        <div id="sequential_vis" class="col s12 l6 push-s1 center-align">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="sinVis"></div>
             <div class="center-align">
-                <a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+                <a id="loop-seq" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
             </div>
         </div>
          <div id="sequential_text" class="col s12 l5">
@@ -130,20 +130,20 @@
                 can finish packing a little bit faster, even if it still takes awhile.
             </p>
         </div>
-        <div id="concurrency_vis" class="col s12 l6 push-s1">
+        <div id="concurrency_vis" class="col s12 l6 push-s1 center-align">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="conVis"></div>
             <div class="center-align container">
-                <a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+                <a id="loop-con" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
             </div>
         </div>
     </div>
     <div id="parallelism" class="row">
-        <div id="parallelism_vis" class="col s12 l6">
+        <div id="parallelism_vis" class="col s12 l6 center-align">
             <!--<button id="par-adv">Play Parallelism</button>-->
             <div id="parVis"></div>
             <div class="center-align container">
-                <a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+                <a id="loop-par" class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
             </div>
         </div>
          <div id="parallelism_text" class="col s12 l5">
