@@ -211,3 +211,29 @@ if (!workerExample.attr('animIsPlaying')) {
 }
 ```
 We recommend placing this inside a function, passing in the worker vis and data object for easier usage. This snippet checks to see if the current vis has a playing animation and if not, resets the data to initial starting points, advances the data target (queueing the animation) and finally re-calls the function on the HTML element playing the animation.
+
+## API
+
+### `.attr(string)`
+This function manipulates various attributes of the worker visualization. Must be called **before** the worker is drawn. Full list of modifyable attributes (default in parens):
+* margin: The margin around the visualization
+    * top (10)
+    * right (10)
+    * bottom (10)
+    * left (10)
+* width: The overall width of the chart (400)
+* height: The overall height of the chart (400)
+* animationDuration: The base length of animations, in milliseconds (1000)
+* workerSize: The space between workers, should be about the size of a worker (25)
+* debug: true - draw target circles, false - don't draw target circles
+* animIsPlaying: true - animation is currently playing so you shouldn't call another animation cycle, false - animation is not playing, ready to play again
+* easeExpo: The exponent on the easing function, changes how the worker and weights move to/from their targets
+
+### `expandWorkerData(dataObj)`
+Modifies a given data object (in the proper format described above) so that it can be drawn by the worker function. Should only be called once.
+
+### `resetData(dataObj)`
+Resets the data object so all workers and weights are at their starting locations. Should be called before `advanceDataTarget`.
+
+## `advanceDataTarget(dataObj)`
+Prepares to start the animation, advancing each worker and weight one target forward which allows them to move to the next target.
