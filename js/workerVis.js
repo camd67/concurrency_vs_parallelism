@@ -64,7 +64,7 @@ function worker(){
                 .attr("transform", function(d) { return "translate(" + getTargetValue(d, targetList, "x") + ", " + getTargetValue(d, targetList, "y") + ")"} );
 
             // workers
-            workerBoxes.append("rect")
+            workerBoxes.append("path")
                 .attr("class", function(d) { return "worker wid" + d.id; })
                 .attr("d", "M50.895,36.02v6.259l-3.755-7.553c-0.047-0.093-0.107-0.174-0.172-0.248   c-0.579-0.858-1.556-1.428-2.663-1.436l-8.377-0.062c-1.782-0.013-3.25,1.434-3.264,3.216l-0.14,18.954   c-0.013,1.78,1.434,3.248,3.216,3.262l1.704,0.013l-0.198,26.916c-0.011,1.398,1.126,2.552,2.525,2.563   c1.398,0.011,2.552-1.126,2.563-2.525l0.198-26.916l1.587,0.012c1.782,0.013,3.25-1.434,3.264-3.216L47.47,43.16l3.424,6.89v3.48")
                 .style("fill", "#000")
