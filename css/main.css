@@ -87,6 +87,9 @@ html {
     height: auto;
 }
 
+#parVis, #conVis, #seqVis {
+    min-height: 400px;
+}
 #truck {
     width: 150px;
     height: auto;

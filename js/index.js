@@ -128,14 +128,17 @@ $(function(){
             wS = $(this).scrollTop();
             if (wS > (hT+hH-wH)){
                 if (!s.attr('animIsPlaying') && !c.attr('animIsPlaying') && !p.attr('animIsPlaying')) {
+                    resetData(cd);
                     advanceDataTarget(cd);
                     d3.select("#c")
                         .data([cd])
                         .call(c);
+                    resetData(pd);
                     advanceDataTarget(pd);
                     d3.select("#p")
                         .data([pd])
                         .call(p);
+                    resetData(sd);
                     advanceDataTarget(sd);
                     d3.select("#s")
                         .data([sd])
