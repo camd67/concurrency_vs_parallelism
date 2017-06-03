@@ -13,10 +13,10 @@
     <script src="js/workerViss.js"></script>
     <script src="js/lineCharts.js"></script>
     <script src="js/index.js"></script>
-
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
+    
      <!-- Compiled and minified CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/css/materialize.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.2/js/materialize.min.js"></script>
@@ -87,9 +87,10 @@
         <div id="sequential_vis" class="col s12 l6 push-s1">
             <!--<button id="con-adv">Play Concurrency</button>-->
             <div id="sinVis"></div>
+            <!--<a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>-->
         </div>
          <div id="sequential_text" class="col s12 l5">
-            <h3>Sequential programming.</h3>
+            <h3>Sequential programming. </h3>
             <p>Before we get into the good stuff, let's look at the basics. Sequential
                 programming is similar to a person who doesn't have anyone there to help 
                 them move. They can only take one box at a time. They take one box, 
@@ -129,12 +130,18 @@
         </div>
         <div id="concurrency_vis" class="col s12 l6 push-s1">
             <!--<button id="con-adv">Play Concurrency</button>-->
+            <!--<div class="left-align container">       
+                <a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+            </div>-->
             <div id="conVis"></div>
         </div>
     </div>
     <div id="parallelism" class="row">
         <div id="parallelism_vis" class="col s12 l6">
             <!--<button id="par-adv">Play Parallelism</button>-->
+            <!--<div class="right-align container">       
+                <a class="btn-floating btn-large waves-effect waves-light black"><i class="material-icons">loop</i></a>
+            </div>-->
             <div id="parVis"></div>
         </div>
          <div id="parallelism_text" class="col s12 l5">
