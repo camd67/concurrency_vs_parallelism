@@ -10,8 +10,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="js/sampleData.js"></script>
-    <script src="js/workerViss.js"></script>
-    <script src="js/lineCharts.js"></script>
+    <script src="js/workerVis.js"></script>
+    <script src="js/lineChart.js"></script>
     <script src="js/index.js"></script>
     
      <!-- Compiled and minified CSS -->
@@ -23,7 +23,7 @@
 
     <!-- Animate.css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css">
-          
+
     <link rel="stylesheet" href="./css/main.css">
 
     <title>Concurrency vs Parallelism - A Visual Explanation</title>
@@ -46,13 +46,13 @@
                     <img id="down" class="animated infinite bounce" src="./img/down.png" alt="down icon">
                 </div>
             </div>
-            
+
         </div>
     </div>
 
     <div id="introduction" class="row valign-wrapper">
         <div id="introduction_icons" class="col s12 l7 text-center">
-            <img src="./img/k.gif" alt="house person">            
+            <img src="./img/k.gif" alt="house person">
         </div>
         <div id="introduction_text" class="col s12 l5">
             <h4>A short introduction.</h4>
@@ -71,7 +71,7 @@
         <div id="background_text" class="col s12 l5">
             <h4>A little background.</h4>
             <p>From roughly 1980-2005, desktop computers got exponentially faster at running sequential programs.
-                But no one knows how to continue this advancement due to various technological limitations. So, we 
+                But no one knows how to continue this advancement due to various technological limitations. So, we
                 started putting multiple processors on the same chip. This is the magic sauce that allowed us to begin
                 parallel programming. We're able to get two things done at the same time. Is your mind blown yet? Probably not.
                 But we'll get there!
@@ -92,17 +92,17 @@
          <div id="sequential_text" class="col s12 l5">
             <h3>Sequential programming. </h3>
             <p>Before we get into the good stuff, let's look at the basics. Sequential
-                programming is similar to a person who doesn't have anyone there to help 
-                them move. They can only take one box at a time. They take one box, 
+                programming is similar to a person who doesn't have anyone there to help
+                them move. They can only take one box at a time. They take one box,
                 place it in the truck, then take the next and so on until all the boxes are
-                in the truck. This sad, friendless person takes much longer to accomplish their 
+                in the truck. This sad, friendless person takes much longer to accomplish their
                 task because they can only complete one task at once.
             </p>
             <p>
                  This is how many traditional programs are run. Sequential programming starts
-                 at the top of the script, executes the first function, then continues onto 
-                 the next. Nothing fancy here, but definitely necessary for most of the modern 
-                 programs we have today. 
+                 at the top of the script, executes the first function, then continues onto
+                 the next. Nothing fancy here, but definitely necessary for most of the modern
+                 programs we have today.
             </p>
         </div>
     </div>
@@ -112,20 +112,20 @@
             <p>
                 Concurrency shakes up sequential programming a little bit.
                 It mostly helps with resource allocation. Placed within our
-                example, you and a few friends are moving your boxes. Not all the boxes 
-                have been fully packed yet, so you go grab the first fully packed box and 
+                example, you and a few friends are moving your boxes. Not all the boxes
+                have been fully packed yet, so you go grab the first fully packed box and
                 start moving it. While your doing this one of your friends is packing up another
                 box. They don't start lifting and moving their box, because you only have one
-                small moving truck and only one of you can comfortably place boxes into the 
+                small moving truck and only one of you can comfortably place boxes into the
                 truck at a time. Once you're done placing your box in the truck, your friend
                 can then start moving their box without running into you. They also have free access
                 to the truck. Then another friend can go and grab their box and start packing it up to move.
             </p>
             <p>This type of programming is helpful because it correctly
-                and efficiently manages access to shared resources. It allows two or 
+                and efficiently manages access to shared resources. It allows two or
                 more tasks to start, run, and complete in overlapping time periods. This doesn't
-                mean they'll ever be running at the same instant. This way you and your friends 
-                can finish packing a little bit faster, even if it still takes awhile. 
+                mean they'll ever be running at the same instant. This way you and your friends
+                can finish packing a little bit faster, even if it still takes awhile.
             </p>
         </div>
         <div id="concurrency_vis" class="col s12 l6 push-s1">
@@ -148,17 +148,17 @@
             <h3>Parallelism explained.</h3>
             <p>
                 Parallelism is where the real magic happens. You and your friends decide
-                that it would be faster to have two trucks. This way two different people 
+                that it would be faster to have two trucks. This way two different people
                 can go grab boxes and place them into the truck without getting in the
                 way of someone else trying to place their box in the truck. So you get two
                 trucks and split up the boxes so you know which ones go into which truck. From
-                here two people are able to grab boxes and begin moving them at the same time. 
+                here two people are able to grab boxes and begin moving them at the same time.
             </p>
             <p>With parallelism you are using extra resources
                 to solve a problem faster. With a multicore processor tasks
-                are able to run at the same time. This is how your computer can run 
+                are able to run at the same time. This is how your computer can run
                 multiple programs at the same time. It also helps get things done faster. This
-                is the real magic of the programming world. 
+                is the real magic of the programming world.
             </p>
         </div>
     </div>
@@ -176,7 +176,7 @@
         <div class="col s12 m6 l4">
             <div id="p"></div>
         </div>
-         
+
     </div>
     <div id="team" class="row">
         <h3 class="center-align">Our team.</h3>

@@ -4,7 +4,7 @@ $(function(){
     var xVar = 'year';
     var yVar = 'mhz';
     var chartData;
-    
+
     // Load data in using d3's csv function.
     d3.csv('data/avg_year.csv', function(error, data) {
         // Put data into generic terms
@@ -22,9 +22,9 @@ $(function(){
         var chart = lineChart().xTitle('Year').yTitle('mhz');
 
         var chartWrapper = d3.select('#background-vis')
-                .datum(chartData) 
-                .call(chart); 
-        
+                .datum(chartData)
+                .call(chart);
+
         // Initialize materialize style
         $('select').material_select()
 
@@ -33,13 +33,11 @@ $(function(){
     var cd = jQuery.extend(true, {}, conData);
     var pd = jQuery.extend(true, {}, parData);
     var sd = jQuery.extend(true, {}, sinData);
-        
+
     expandWorkerData(conData);
     expandWorkerData(parData);
     expandWorkerData(sinData);
 
-    console.log("asdfasf");
-    console.log(sd);
     expandWorkerData(cd);
     expandWorkerData(pd);
     expandWorkerData(sd);
@@ -79,7 +77,6 @@ $(function(){
         wH = $(window).height(),
         wS = $(this).scrollTop();
         if (wS > (hT+hH-wH)){
-            console.log("scroll")
             if (!sinWork.attr('animIsPlaying')) {
                 resetData(sinData);
                 advanceDataTarget(sinData);
@@ -103,7 +100,7 @@ $(function(){
                         .data([conData])
                         .call(conWork);
                 }
-               
+
             }
     });
 
@@ -120,11 +117,10 @@ $(function(){
                         .data([parData])
                         .call(parWork);
                 }
-                
+
             }
     });
 
-    console.log(sd, sinData)
     $(window).scroll(function() {
         var hT = $('#compare').offset().top,
             hH = $('#compare').outerHeight(),
@@ -145,7 +141,7 @@ $(function(){
                         .data([sd])
                         .call(s);
                 }
-                
+
             }
     });
 });

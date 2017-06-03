@@ -4,11 +4,12 @@ function lineChart(){
     height = 300
     xScale = d3.scaleLinear(),
     yScale = d3.scaleLinear(),
-    xTitle = 'X Axis Title',
-    yTitle = 'Y Axis Title',
-    stroke = 'lightgray',
+    xTitle = '',
+    yTitle = '',
+    strokeColor = 'lightgray',
     strokeWidth = '1.5',
-    title = '';
+    title = ''
+    hoverColor = 'red';
 
     var drawWidth = (width - margin.right - margin.left);
     var drawHeight = (height - margin.top - margin.bottom);
@@ -37,14 +38,12 @@ function lineChart(){
                 .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
                 .attr("class", 'chart-g');
 
-            ///////// HOVERS STUFF OVERLAY //////////////
-            // Apend an overlay rectangle to catch hover events
+            // Append an overlay rectangle to catch hover events
             var overlay = svgEnter.select('.chart-g').append('rect')
                 .attr("class", "overlay")
                 .attr('width', drawWidth)
                 .attr('height', drawHeight)
                 .attr('opacity', 0);
-            //////// HOVER STUFF OVERLAY ////////////////
 
             // Append axes to the svgEnter element
             svgEnter.append('g')
@@ -102,7 +101,7 @@ function lineChart(){
                 .attr('class', 'lines')
                 .attr('d', line(data))
                 .attr('fill', 'none')
-                .attr('stroke', stroke)
+                .attr('stroke', strokeColor)
                 .attr('stroke-width', strokeWidth)
                 .attr('stroke-dasharray', function() {return d3.select(this).node().getTotalLength() + " " + d3.select(this).node().getTotalLength();})
                 .attr('stroke-dashoffset', function() {return d3.select(this).node().getTotalLength();})
@@ -113,7 +112,7 @@ function lineChart(){
             lines.attr('stroke-dasharray', 'none')
                 .transition().duration(1500)
                 .attr('d', line(data))
-                .attr('stroke', stroke);
+                .attr('stroke', strokeColor);
 
             // Exit lines
             lines.exit()
@@ -123,7 +122,7 @@ function lineChart(){
                 .remove();
 
             ///////////////////// START HOVER STUFF ///////////////////////
-            // Function to draw hovers (circles and text) based on year (called from the `overlay` mouseover)
+            // Function to draw hovers (circles and text) based on x variable (called from the `overlay` mouseover)
             function drawHovers(year) {
                 // Bisector function to get closest data point: note, this returns an *index* in your array
                 // Get hover data by using the bisector function to find the y value
@@ -132,8 +131,8 @@ function lineChart(){
                 }).left;
 
                 // Iterate through your selectedData array
-                // Sort the values of each country by +year
-                // Return the element closest to your year variable.
+                // Sort the values of each data point by x-value
+                // Return the element closest to your x variable.
                 var bisectors = []
                     data.sort(function(a, b) {
                         return (+a.x) - (+b.x);
@@ -153,7 +152,7 @@ function lineChart(){
                     .attr('cy', function(d) {
                         return yScale(d.y);
                     })
-                    .style('stroke', 'red')
+                    .style('stroke', hoverColor)
                     .style('fill', 'none')
                     .style('stroke-width', '1px');
 
@@ -207,9 +206,6 @@ function lineChart(){
             })
             ///////////////////// END HOVER STUFF /////////////////////////
 
-
-
-
         });
     };
 
@@ -247,6 +243,18 @@ function lineChart(){
     chart.yTitle = function(value) {
         if (!arguments.length) return yTitle;
         yTitle = value;
+        return chart;
+    };
+
+    chart.title = function(value) {
+        if (!arguments.length) return title;
+        title = value;
+        return chart;
+    };
+
+    chart.hoverColor = function(value) {
+        if (!arguments.length) return hoverColor;
+        hoverColor = value;
         return chart;
     };
 

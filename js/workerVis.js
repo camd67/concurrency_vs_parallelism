@@ -11,10 +11,8 @@ function worker(){
         width: 400,
         height: 400,
         animationDuration: 1000,
-        sourceSize: 25,
         workerSize: 25,
         debug: false, // set to true if you want to see small red circles for every target
-        maxTargets: 0,
         animIsPlaying: false,
         easeExpo: 1.5
     }
@@ -62,16 +60,21 @@ function worker(){
             // Append all the worker wrappers, worker boxes, and worker carry boxes
             var workerBoxes = workers.enter()
                 .append("g")
-                .attr("class", "worker-group");
+                .attr("class", "worker-group")
+                .attr("transform", function(d) { return "translate(" + getTargetValue(d, targetList, "x") + ", " + getTargetValue(d, targetList, "y") + ")"} );
 
             // workers
             workerBoxes.append("rect")
                 .attr("class", function(d) { return "worker wid" + d.id; })
-                .attr("width", attrs.workerSize)
-                .attr("height", attrs.workerSize)
-                .style("fill", function(d) { return d.color; })
-                .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
-                .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
+                .attr("d", "M50.895,36.02v6.259l-3.755-7.553c-0.047-0.093-0.107-0.174-0.172-0.248   c-0.579-0.858-1.556-1.428-2.663-1.436l-8.377-0.062c-1.782-0.013-3.25,1.434-3.264,3.216l-0.14,18.954   c-0.013,1.78,1.434,3.248,3.216,3.262l1.704,0.013l-0.198,26.916c-0.011,1.398,1.126,2.552,2.525,2.563   c1.398,0.011,2.552-1.126,2.563-2.525l0.198-26.916l1.587,0.012c1.782,0.013,3.25-1.434,3.264-3.216L47.47,43.16l3.424,6.89v3.48")
+                .style("fill", "#000")
+                ;
+            workerBoxes.append("ellipse")
+                .attr("cx", 40.248)
+                .attr("cy", 22.816)
+                .attr("rx", 8.283)
+                .attr("ry", 8.283)
+                .style("fill", "#000")
                 ;
 
             var weights = ele.select(".chartg").selectAll(".weight-group").data(data.weights, function(d){ return d.id; })
@@ -95,11 +98,14 @@ function worker(){
             weights.selectAll(".weight").merge(weights)
                 .transition()
                 .duration(150)
-                .attr("x", function(d){ attrs.animIsPlaying = true; return d.weightX; })
+                .attr("x", function(d){
+                    // not the best thing, but it works
+                    attrs.animIsPlaying = true;
+                    return d.weightX; })
                 .attr("y", function(d){ return d.weightY; })
                 ;
             // merge in workers for the animations
-            var workerBoxesMerge = workers.selectAll(".worker").merge(workers)
+            var workerBoxesMerge = workers.merge(workers)
                 .transition()
                 .ease(easeFunc)
                 .duration(attrs.animationDuration)
@@ -108,9 +114,8 @@ function worker(){
                     : d.globalIndex * attrs.animationDuration; })
                 .on("start", function repeat(){
                     d3.active(this)
-                        .attr("x", function(d) { return getTargetValue(d, targetList, "x"); })
-                        .attr("y", function(d) { return getTargetValue(d, targetList, "y"); })
-                        .transition()
+                        .attr("transform", function(d) { console.log("Asdf"); return "translate(" + (getTargetValue(d, targetList, "x") - 15) + ", " + (getTargetValue(d, targetList, "y") - 15) + ")"} )
+                         .transition()
                         .ease(easeFunc)
                         .duration(function(d) {
                             var dur = attrs.animationDuration;
@@ -333,7 +338,7 @@ function resetData(data){
     for(var i = 0; i < data.weights.length; i++){
         data.weights[i].target = -1;
         data.weights[i].weightTarget  = data.weights[i].baseWeightTarget;
-    }    
+    }
 }
 
 // goes through a data object and increments the worker targets, wrapping around to -1
